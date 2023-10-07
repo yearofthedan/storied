@@ -1,3 +1,4 @@
+import 'package:bibi/features/asset.dart';
 import 'package:bibi/widgets/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
@@ -11,6 +12,7 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> {
   QuillController? _controller;
+  Asset asset = Asset('document.json');
 
   @override
   void initState() {
@@ -19,12 +21,19 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   Future<void> _loadFromAssets() async {
-    final doc = Document()..insert(0, 'Empty asset');
-
-    setState(() {
-      _controller = QuillController(
-          document: doc, selection: const TextSelection.collapsed(offset: 0));
-    });
+    try {
+      final doc = Document.fromJson(await asset.jsonContent);
+      setState(() {
+        _controller = QuillController(
+            document: doc, selection: const TextSelection.collapsed(offset: 0));
+      });
+    } catch (error) {
+      final doc = Document()..insert(0, 'Empty asset');
+      setState(() {
+        _controller = QuillController(
+            document: doc, selection: const TextSelection.collapsed(offset: 0));
+      });
+    }
   }
 
   @override
@@ -32,7 +41,8 @@ class _DocumentPageState extends State<DocumentPage> {
     if (_controller == null) {
       return Container();
     } else {
-      return EditorWidget(_controller!);
+      return EditorWidget(_controller!,
+          () => asset.setJsonContent(_controller?.document.toDelta().toJson()));
     }
   }
 }
