@@ -1,5 +1,5 @@
-import 'package:bibi/features/document.dart';
-import 'package:bibi/features/favourites.dart';
+import 'package:bibi/features/document/document_page.dart';
+import 'package:bibi/features/story_select/story_select_page.dart';
 import 'package:flutter/material.dart';
 
 class NavEntry {
@@ -11,7 +11,7 @@ class NavEntry {
 }
 
 final List<NavEntry> navEntries = [
-  NavEntry(const FavouritesPage(), 'Home', Icons.home),
+  NavEntry(const StorySelectPage(), 'Home', Icons.home),
   NavEntry(const DocumentPage(), 'Editorl', Icons.edit)
 ];
 

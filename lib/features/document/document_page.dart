@@ -1,4 +1,5 @@
-import 'package:bibi/features/asset.dart';
+import 'package:bibi/features/document/document_persistence.dart';
+import 'package:bibi/features/local_storage.dart';
 import 'package:bibi/widgets/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
@@ -12,7 +13,8 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> {
   QuillController? _controller;
-  Asset asset = Asset('document.json');
+  DocumentPersistence documentPersistence =
+      DocumentPersistence(LocalStorage(), 'document.json');
 
   @override
   void initState() {
@@ -22,7 +24,7 @@ class _DocumentPageState extends State<DocumentPage> {
 
   Future<void> _loadFromAssets() async {
     try {
-      final doc = Document.fromJson(await asset.jsonContent);
+      final doc = await documentPersistence.document;
       setState(() {
         _controller = QuillController(
             document: doc, selection: const TextSelection.collapsed(offset: 0));
@@ -42,7 +44,7 @@ class _DocumentPageState extends State<DocumentPage> {
       return Container();
     } else {
       return EditorWidget(_controller!,
-          () => asset.setJsonContent(_controller?.document.toDelta().toJson()));
+          () => documentPersistence.saveDocument(_controller!.document));
     }
   }
 }
