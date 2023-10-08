@@ -1,60 +1,41 @@
-import 'package:bibi/features/document/document_page.dart';
-import 'package:bibi/features/story_select/story_select_page.dart';
+import 'package:bibi/features/home/story_selection.dart';
+import 'package:bibi/storage/local_storage.dart';
 import 'package:flutter/material.dart';
 
-class NavEntry {
-  dynamic component;
-  String label;
-  IconData icon;
-
-  NavEntry(this.component, this.label, this.icon);
-}
-
-final List<NavEntry> navEntries = [
-  NavEntry(const StorySelectPage(), 'Home', Icons.home),
-  NavEntry(const DocumentPage(), 'Editorl', Icons.edit)
-];
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  var selectedIndex = 0;
+class _HomePageState extends State<HomePage> {
+  final LocalStorage _localStorage = LocalStorage();
+  List<String>? _storyListing;
+
+  @override
+  void initState() {
+    super.initState();
+    _getStoryListing();
+  }
+
+  Future<void> _getStoryListing() async {
+    List<String> paths = await _localStorage.getFileNames();
+    setState(() {
+      _storyListing = paths;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget page = navEntries[selectedIndex].component;
-
-    return LayoutBuilder(builder: (context, constraints) {
-      return Scaffold(
-        body: Row(
-          children: [
-            SafeArea(
-                child: NavigationRail(
-              extended: constraints.maxWidth >= 600,
-              destinations: navEntries
-                  .map((e) => NavigationRailDestination(
-                      icon: Icon(e.icon), label: Text(e.label)))
-                  .toList(),
-              onDestinationSelected: (value) {
-                setState(() {
-                  selectedIndex = value;
-                });
-              },
-              selectedIndex: selectedIndex,
-            )),
-            Expanded(
-                child: Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              child: page,
-            ))
-          ],
-        ),
-      );
-    });
+    if (_storyListing == null) {
+      return Scaffold(body: Container(color: Colors.green));
+    }
+    return Scaffold(
+        backgroundColor: Colors.green,
+        body: Container(
+          padding: const EdgeInsets.all(8),
+          child: Center(child: StorySelection(_storyListing!)),
+        ));
   }
 }

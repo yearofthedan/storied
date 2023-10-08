@@ -1,5 +1,5 @@
-import 'package:bibi/features/document/document_persistence.dart';
-import 'package:bibi/features/local_storage.dart';
+import 'package:bibi/features/story/document/document_persistence.dart';
+import 'package:bibi/storage/local_storage.dart';
 import 'package:bibi/widgets/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
@@ -13,21 +13,22 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> {
   QuillController? _controller;
-  DocumentPersistence documentPersistence =
-      DocumentPersistence(LocalStorage(), 'document.json');
+  DocumentPersistence? documentPersistence;
 
   @override
   void initState() {
     super.initState();
-    _loadFromAssets();
   }
 
-  Future<void> _loadFromAssets() async {
+  Future<void> _loadFromAssets(String file) async {
+    documentPersistence = DocumentPersistence(LocalStorage(), file);
+
     try {
-      final doc = await documentPersistence.document;
+      final doc = await documentPersistence?.document;
       setState(() {
         _controller = QuillController(
-            document: doc, selection: const TextSelection.collapsed(offset: 0));
+            document: doc!,
+            selection: const TextSelection.collapsed(offset: 0));
       });
     } catch (error) {
       final doc = Document()..insert(0, 'Empty asset');
@@ -40,11 +41,14 @@ class _DocumentPageState extends State<DocumentPage> {
 
   @override
   Widget build(BuildContext context) {
+    final file = ModalRoute.of(context)!.settings.arguments as String;
+    _loadFromAssets(file);
+
     if (_controller == null) {
       return Container();
     } else {
       return EditorWidget(_controller!,
-          () => documentPersistence.saveDocument(_controller!.document));
+          () => documentPersistence!.saveDocument(_controller!.document));
     }
   }
 }

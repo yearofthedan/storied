@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bibi/features/local_storage.dart';
+import 'package:bibi/storage/local_storage.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class DocumentPersistence {

@@ -15,9 +15,14 @@ class LocalStorage {
   }
 
   Future<List<String>> get directoryListPaths async {
-    return (await directory)
-        .list(recursive: false, followLinks: false)
-        .map((event) => event.path)
+    final list = (await directory).list(recursive: false, followLinks: false);
+
+    return list.map((file) => file.path).toList();
+  }
+
+  Future<List<String>> getFileNames({type = 'json'}) async {
+    return (await directoryListPaths)
+        .where((path) => path.endsWith('json'))
         .toList();
   }
 
