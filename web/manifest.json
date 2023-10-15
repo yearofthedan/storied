@@ -1,6 +1,6 @@
 {
-    "name": "bibi",
-    "short_name": "bibi",
+    "name": "storied",
+    "short_name": "storied",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

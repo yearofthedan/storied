@@ -1,8 +1,11 @@
-import 'package:bibi/features/story/document/document_persistence.dart';
-import 'package:bibi/storage/local_storage.dart';
-import 'package:bibi/widgets/editor.dart';
+import 'package:storied/config/app_config.dart';
+import 'package:storied/features/story/document/document_persistence.dart';
+import 'package:storied/features/selected_story_state.dart';
+import 'package:storied/storage/local_storage_client.dart';
+import 'package:storied/widgets/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:provider/provider.dart';
 
 class DocumentPage extends StatefulWidget {
   const DocumentPage({super.key});
@@ -20,29 +23,29 @@ class _DocumentPageState extends State<DocumentPage> {
     super.initState();
   }
 
-  Future<void> _loadFromAssets(String file) async {
-    documentPersistence = DocumentPersistence(LocalStorage(), file);
-
+  docOrNew(DocumentPersistence persistence) async {
     try {
-      final doc = await documentPersistence?.document;
-      setState(() {
-        _controller = QuillController(
-            document: doc!,
-            selection: const TextSelection.collapsed(offset: 0));
-      });
+      final doc = await persistence.getProjectDocument();
+      return doc;
     } catch (error) {
-      final doc = Document()..insert(0, 'Empty asset');
-      setState(() {
-        _controller = QuillController(
-            document: doc, selection: const TextSelection.collapsed(offset: 0));
-      });
+      return Document()..insert(0, 'Empty asset');
     }
+  }
+
+  Future<void> _loadFromAssets(String projectId) async {
+    AppStorage appStorage = AppStorage(LocalStorageClient());
+    documentPersistence = DocumentPersistence(appStorage, projectId);
+    Document doc = await docOrNew(documentPersistence!);
+    setState(() {
+      _controller = QuillController(
+          document: doc, selection: const TextSelection.collapsed(offset: 0));
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final file = ModalRoute.of(context)!.settings.arguments as String;
-    _loadFromAssets(file);
+    Project project = context.watch<SelectedStoryState>().project;
+    _loadFromAssets(project.id);
 
     if (_controller == null) {
       return Container();

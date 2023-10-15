@@ -1,10 +1,11 @@
-import 'package:bibi/features/story/story_page.dart';
+import 'package:storied/config/app_config.dart';
+import 'package:storied/features/story/navigation/story_navigation_page.dart';
 import 'package:flutter/material.dart';
 
 class StorySelectOption extends StatelessWidget {
-  final String entry;
+  final Project project;
 
-  const StorySelectOption(this.entry, {super.key});
+  const StorySelectOption(this.project, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +16,15 @@ class StorySelectOption extends StatelessWidget {
             color: Colors.white,
             child: ListTile(
               leading: const Icon(Icons.book),
-              title: Text(entry),
-              subtitle: const Text('clsick'),
-              onTap: () => {
+              title: Text(project.name),
+              subtitle: const Text('click'),
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => StoryPage(entry),
-                    settings: RouteSettings(
-                      arguments: entry,
-                    ),
+                    builder: (context) => ProjectPage(project),
                   ),
-                )
+                );
               },
             )));
   }

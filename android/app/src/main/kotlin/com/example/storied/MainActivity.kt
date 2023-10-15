@@ -1,4 +1,4 @@
-package com.example.bibi
+package com.example.storied
 
 import io.flutter.embedding.android.FlutterActivity
 

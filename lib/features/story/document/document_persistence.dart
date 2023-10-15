@@ -1,23 +1,28 @@
 import 'dart:io';
 
-import 'package:bibi/storage/local_storage.dart';
+import 'package:storied/config/app_config.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class DocumentPersistence {
-  String documentName;
-  LocalStorage storage;
+  String projectId;
+  AppStorage appStorage;
 
-  DocumentPersistence(this.storage, this.documentName);
+  DocumentPersistence(this.appStorage, this.projectId);
 
-  Future<Document> get document async {
-    if (!(await storage.exists(documentName))) {
-      await storage.writeJson(documentName, r'[{"insert":"hello\n"}]');
+  Future<Document> getProjectDocument() async {
+    dynamic result =
+        await appStorage.getFromProjectRoot(projectId, 'document.json');
+    if (result == null) {
+      await appStorage.writeToProjectRoot(
+          projectId, 'document.json', r'[{"insert":"hello\n"}]');
     }
 
-    return Document.fromJson(await storage.getJson(documentName));
+    return Document.fromJson(
+        await appStorage.getFromProjectRoot(projectId, 'document.json'));
   }
 
   Future<File> saveDocument(Document document) async {
-    return storage.writeJson(documentName, document.toDelta().toJson());
+    return appStorage.writeToProjectRoot(
+        projectId, 'document.json', document.toDelta().toJson());
   }
 }

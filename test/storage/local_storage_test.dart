@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:bibi/storage/local_storage.dart';
+import 'package:storied/storage/local_storage_client.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import '../_helpers/storage.dart';
 
 const root = 'root/com.app';
 
@@ -13,11 +12,11 @@ void main() {
 
   group('getFileNames', () {
     setUp(() async {
-      PathProviderPlatform.instance = FakePathProviderPlatform();
+      PathProviderPlatform.instance = FakePathProviderPlatform(root);
     });
     test('returns a list of filenames', () async {
       IOOverrides.runZoned(() async {
-        final storage = LocalStorage();
+        final storage = LocalStorageClient();
 
         var result = await storage.getFileNames(type: 'json ');
 
@@ -26,9 +25,9 @@ void main() {
     });
 
     test('getApplicationDocumentsDirectory', () async {
-      final storage = LocalStorage();
+      final storage = LocalStorageClient();
 
-      expect((await storage.directory).path, root);
+      expect((await storage.storageDir).path, root);
     });
   });
 }
@@ -37,19 +36,7 @@ class FakeDirectory extends Fake implements Directory {
   @override
   Stream<FileSystemEntity> list(
       {bool recursive = false, bool followLinks = true}) {
-
-    return Stream.fromIterable([
-      File('$root/file_1.unknown'),
-      File('$root/file_2.json')
-      ]);
-  }
-}
-
-class FakePathProviderPlatform extends Fake
-    with MockPlatformInterfaceMixin
-    implements PathProviderPlatform {
-  @override
-  Future<String?> getApplicationDocumentsPath() async {
-    return root;
+    return Stream.fromIterable(
+        [File('$root/file_1.unknown'), File('$root/file_2.json')]);
   }
 }

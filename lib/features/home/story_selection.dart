@@ -1,8 +1,9 @@
-import 'package:bibi/features/home/story_select_option.dart';
+import 'package:storied/config/app_config.dart';
+import 'package:storied/features/home/story_select_option.dart';
 import 'package:flutter/material.dart';
 
 class StorySelection extends StatelessWidget {
-  final List<String> storyListing;
+  final List<Project> storyListing;
 
   const StorySelection(this.storyListing, {super.key});
 
@@ -13,7 +14,8 @@ class StorySelection extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
         crossAxisCount: 4,
-        children:
-            storyListing.map((entry) => StorySelectOption(entry)).toList());
+        children: storyListing
+            .map((entry) => StorySelectOption(entry))
+            .toList());
   }
 }

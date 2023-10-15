@@ -1,5 +1,5 @@
-import 'package:bibi/widgets/notes/notes_block_embed.dart';
-import 'package:bibi/widgets/notes/notes_embed_builder.dart';
+import 'package:storied/widgets/notes/notes_block_embed.dart';
+import 'package:storied/widgets/notes/notes_embed_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/extensions.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
