@@ -45,7 +45,9 @@ class _DocumentPageState extends State<DocumentPage> {
   @override
   Widget build(BuildContext context) {
     Project project = context.watch<SelectedStoryState>().project;
-    _loadFromAssets(project.id);
+    if (_controller == null) {
+      _loadFromAssets(project.id);
+    }
 
     if (_controller == null) {
       return Container();

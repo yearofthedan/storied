@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:provider/provider.dart';
+import 'package:storied/config/app_config.dart';
 import 'package:storied/features/home/home_page.dart';
 import 'package:storied/features/selected_story_state.dart';
 
@@ -23,7 +24,7 @@ void main() {
       IOOverrides.runZoned(() async {
         await tester.pumpWidget(MaterialApp(
             home: ChangeNotifierProvider(
-          create: (context) => SelectedStoryState(),
+          create: (context) => SelectedStoryState(Project.fromName('my story')),
           child: const HomePage(),
         )));
         await tester.pumpAndSettle();
