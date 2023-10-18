@@ -1,45 +1,37 @@
 import 'package:storied/config/app_config.dart';
+import 'package:storied/config/project.dart';
 import 'package:storied/features/home/story_selection.dart';
 import 'package:flutter/material.dart';
-import 'package:storied/storage/local_storage_client.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final AppConfig _appConfig;
+
+  const HomePage(this._appConfig, {super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  AppConfig? _configModel;
+  List<Project> _projects = [];
 
   @override
   void initState() {
     super.initState();
-    _getAppConfig();
-  }
-
-  Future<void> _getAppConfig() async {
-    AppConfig configModel =
-        (await AppConfigFactory.loadConfig(AppStorage(LocalStorageClient())));
     setState(() {
-      _configModel = configModel;
+      _projects = widget._appConfig.projects;
     });
   }
 
   Future<void> _addProject() async {
-    var config = await _configModel!.addProject();
+    var config = await widget._appConfig.addProject();
     setState(() {
-      _configModel = config;
+      _projects = config.projects;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_configModel == null) {
-      return Container();
-    }
-
     return Scaffold(
         floatingActionButton: FloatingActionButton.extended(
             onPressed: () => _addProject(),
@@ -49,7 +41,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.green,
         body: Container(
           padding: const EdgeInsets.all(8),
-          child: Center(child: StorySelection(_configModel!.projects)),
+          child: Center(child: StorySelection(_projects)),
         ));
   }
 }

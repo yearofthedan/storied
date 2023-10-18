@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:storied/config/app_config.dart';
+import 'package:storied/config/project.dart';
 
 class SelectedStoryState extends ChangeNotifier {
   Project project;

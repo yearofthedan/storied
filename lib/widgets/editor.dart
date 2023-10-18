@@ -21,6 +21,8 @@ class EditorWidget extends StatelessWidget {
       showFontFamily: false,
       showCodeBlock: false,
       showInlineCode: false,
+      showListCheck: false,
+      showQuote: false,
       showLink: false,
       customButtons: [
         QuillCustomButton(

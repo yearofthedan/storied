@@ -34,6 +34,8 @@ void main() {
 
 class FakeDirectory extends Fake implements Directory {
   @override
+  String get path => root;
+  @override
   Stream<FileSystemEntity> list(
       {bool recursive = false, bool followLinks = true}) {
     return Stream.fromIterable(

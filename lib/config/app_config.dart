@@ -1,53 +1,8 @@
-import 'dart:io';
 import 'dart:math';
 
-import 'package:storied/storage/local_storage_client.dart';
+import 'package:storied/config/app_storage.dart';
 import 'package:english_words/english_words.dart';
-
-class Project {
-  final String name;
-  final String id;
-
-  Project(this.id, this.name);
-
-  Project.fromName(this.name) : id = name.replaceAll(' ', '_');
-
-  Map<String, dynamic> toJson() => {'name': name, 'id': id};
-}
-
-class AppStorage {
-  final LocalStorageClient _localStorageClient;
-
-  AppStorage(this._localStorageClient);
-
-  Future<String> createNewProjectStorage(String projectId) async {
-    return (await _localStorageClient.createStorageDirectory(projectId)).path;
-  }
-
-  Future<dynamic> overwriteProjectManifest(dynamic content) async {
-    return _localStorageClient.writeJsonToStorage('projects.json', content);
-  }
-
-  Future<dynamic> getProjectManifest() async {
-    return _localStorageClient.getJsonFromStorage('projects.json');
-  }
-
-  Future<String> getProjectRoot(projectId) async {
-    return (await _localStorageClient.createStorageDirectory(projectId)).path;
-  }
-
-  Future<dynamic> getFromProjectRoot(projectId, String fileName) async {
-    String folder = await getProjectRoot(projectId);
-    return _localStorageClient.getJsonFileAtPath('$folder/$fileName');
-  }
-
-  Future<File> writeToProjectRoot(
-      String projectId, String fileName, dynamic content) async {
-    String folder = await getProjectRoot(projectId);
-    return _localStorageClient.writeJsonFileAtPath(
-        '$folder/$fileName', content);
-  }
-}
+import 'package:storied/config/project.dart';
 
 class AppConfig {
   final List<Project> projects;
@@ -66,7 +21,7 @@ class AppConfig {
   Future<AppConfig> addProject() async {
     String projectName =
         '${nouns.elementAt(Random().nextInt(50))} ${nouns.elementAt(Random().nextInt(50))}';
-    Project newProject = Project.fromName(projectName);
+    Project newProject = Project.newWithName(projectName);
 
     projects.add(newProject);
     await Future.wait([

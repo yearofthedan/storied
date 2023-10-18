@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:storied/config/app_config.dart';
+import 'package:storied/config/app_storage.dart';
 import 'package:storied/storage/local_storage_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,7 +14,8 @@ void main() {
   group('getConfig', () {
     test('returns projects if they exist', () async {
       var config = await AppConfigFactory.loadConfig(AppStorage(
-          FakeLocalStorageClient('{"projects": [{"name":"a project"}]}')));
+          FakeLocalStorageClient(
+              '{"projects": [{"name":"a project", "id": "123"}]}')));
 
       expect(config.projects.length, 1);
     });
@@ -32,7 +34,7 @@ class FakeLocalStorageClient extends Fake implements LocalStorageClient {
 
   FakeLocalStorageClient(this._content);
   @override
-  Future getJsonFromStorage(String fileName) {
+  Future<dynamic> getJsonFromStorage(String fileName) {
     if (_content != null) {
       return Future.value(jsonDecode(_content!));
     }

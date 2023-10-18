@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:storied/config/app_config.dart';
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:storied/config/app_storage.dart';
 
 class DocumentPersistence {
   String projectId;

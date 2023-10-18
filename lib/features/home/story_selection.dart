@@ -1,4 +1,4 @@
-import 'package:storied/config/app_config.dart';
+import 'package:storied/config/project.dart';
 import 'package:storied/features/home/story_select_option.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,4 @@
-import 'package:storied/config/app_config.dart';
+import 'package:storied/config/project.dart';
 import 'package:storied/features/story/navigation/story_navigation_page.dart';
 import 'package:flutter/material.dart';
 
