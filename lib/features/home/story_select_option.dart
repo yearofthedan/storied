@@ -1,5 +1,5 @@
 import 'package:storied/config/project.dart';
-import 'package:storied/features/story/navigation/story_navigation_page.dart';
+import 'package:storied/features/story/story_project_page.dart';
 import 'package:flutter/material.dart';
 
 class StorySelectOption extends StatelessWidget {
@@ -22,7 +22,7 @@ class StorySelectOption extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProjectPage(project),
+                    builder: (context) => StoryProjectPage(project),
                   ),
                 );
               },
