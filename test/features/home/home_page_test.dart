@@ -7,7 +7,7 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'package:provider/provider.dart';
 import 'package:storied/config/app_config.dart';
 import 'package:storied/config/project.dart';
-import 'package:storied/features/home/home_page.dart';
+import 'package:storied/features/home/home_screen.dart';
 import 'package:storied/features/selected_story_state.dart';
 
 import '../../_helpers/storage.dart';
@@ -26,7 +26,7 @@ void main() {
           home: ChangeNotifierProvider(
         create: (context) =>
             SelectedStoryState(Project.newWithName('my story')),
-        child: HomePage(FakeAppConfig()),
+        child: HomeScreen(FakeAppConfig()),
       )));
       await tester.pumpAndSettle();
 

@@ -10,22 +10,22 @@ class StorySelectOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        width: 300.0,
-        height: 200.0,
-        child: Card(
-            color: Colors.white,
-            child: ListTile(
-              leading: const Icon(Icons.book),
-              title: Text(project.name),
-              subtitle: const Text('click'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => StoryProjectPage(project),
-                  ),
-                );
-              },
-            )));
+        width: 20.0,
+        child: ListTile(
+          textColor: Theme.of(context).colorScheme.onBackground,
+          tileColor: Theme.of(context).colorScheme.background,
+          iconColor: Theme.of(context).colorScheme.onBackground,
+          leading: const Icon(Icons.book),
+          title: Text(project.name),
+          subtitle: const Text('click'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StoryProjectPage(project),
+              ),
+            );
+          },
+        ));
   }
 }

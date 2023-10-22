@@ -9,13 +9,10 @@ class StorySelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
+    return ListView(
         padding: const EdgeInsets.all(20),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        crossAxisCount: 4,
-        children: storyListing
-            .map((entry) => StorySelectOption(entry))
-            .toList());
+        shrinkWrap: true,
+        children:
+            storyListing.map((entry) => StorySelectOption(entry)).toList());
   }
 }
