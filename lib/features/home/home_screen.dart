@@ -58,13 +58,16 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.transparent,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            // mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
                   width: double.infinity,
                   child: Text(
                     'Storied',
-                    style: text.headlineLarge?.apply(color: colors.onPrimary),
+                    style: text.headlineLarge?.apply(
+                        color: colors.onPrimary,
+                        decorationColor: colors.onPrimary,
+                        decoration: TextDecoration.underline),
+                    textAlign: TextAlign.center,
                   )),
               StorySelection(_projects),
               // ,

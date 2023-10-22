@@ -7,25 +7,37 @@ class StorySelectOption extends StatelessWidget {
 
   const StorySelectOption(this.project, {super.key});
 
+  _navigateToStory(context) => () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StoryProjectPage(project),
+          ),
+        );
+      };
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 20.0,
-        child: ListTile(
-          textColor: Theme.of(context).colorScheme.onBackground,
-          tileColor: Theme.of(context).colorScheme.background,
-          iconColor: Theme.of(context).colorScheme.onBackground,
-          leading: const Icon(Icons.book),
-          title: Text(project.name),
-          subtitle: const Text('click'),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => StoryProjectPage(project),
-              ),
-            );
-          },
-        ));
+    var navCallback = _navigateToStory(context);
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outline,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ListTile(
+              title: Text(project.name),
+              subtitle: const Text('select to see more'),
+              onTap: navCallback,
+            ),
+            TextButton(onPressed: navCallback, child: const Text('view')),
+          ]),
+    );
   }
 }
