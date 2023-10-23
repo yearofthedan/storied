@@ -1,7 +1,9 @@
 import 'package:storied/config/app_config.dart';
 import 'package:storied/config/project.dart';
+import 'package:storied/features/home/add_story_screen.dart';
 import 'package:storied/features/home/story_selection.dart';
 import 'package:flutter/material.dart';
+import 'package:storied/features/story/story_project_page.dart';
 
 class HomeScreen extends StatefulWidget {
   final AppConfig _appConfig;
@@ -23,11 +25,30 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<void> _addProject() async {
-    var config = await widget._appConfig.addProject();
+  Future<void> _onAddStory(String name) async {
+    var project = await widget._appConfig.addProject(name);
     setState(() {
-      _projects = config.projects;
+      _projects = widget._appConfig.projects;
     });
+    _navigateToStory(project);
+  }
+
+  void _addProject() async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          fullscreenDialog: true,
+          builder: (context) => AddStory(_onAddStory),
+        ));
+  }
+
+  void _navigateToStory(project) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StoryProjectPage(project),
+      ),
+    );
   }
 
   @override
@@ -69,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: TextDecoration.underline),
                     textAlign: TextAlign.center,
                   )),
-              StorySelection(_projects),
+              StorySelection(_projects, _navigateToStory),
               // ,
             ],
           )),

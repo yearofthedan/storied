@@ -1,24 +1,16 @@
 import 'package:storied/config/project.dart';
-import 'package:storied/features/story/story_project_page.dart';
 import 'package:flutter/material.dart';
 
 class StorySelectOption extends StatelessWidget {
   final Project project;
+  final Function(Project) _navigateToStory;
 
-  const StorySelectOption(this.project, {super.key});
-
-  _navigateToStory(context) => () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => StoryProjectPage(project),
-          ),
-        );
-      };
+  const StorySelectOption(this.project, this._navigateToStory, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    var navCallback = _navigateToStory(context);
+    onNavigate() => _navigateToStory(project);
+
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -34,9 +26,9 @@ class StorySelectOption extends StatelessWidget {
             ListTile(
               title: Text(project.name),
               subtitle: const Text('select to see more'),
-              onTap: navCallback,
+              onTap: onNavigate,
             ),
-            TextButton(onPressed: navCallback, child: const Text('view')),
+            TextButton(onPressed: onNavigate, child: const Text('view')),
           ]),
     );
   }

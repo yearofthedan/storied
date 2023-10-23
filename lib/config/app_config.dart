@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:storied/config/app_storage.dart';
-import 'package:english_words/english_words.dart';
 import 'package:storied/config/project.dart';
 
 class AppConfig {
@@ -18,9 +15,7 @@ class AppConfig {
             List<Project>.from(pr.map((e) => Project(e['id'], e['name']))));
   }
 
-  Future<AppConfig> addProject() async {
-    String projectName =
-        '${nouns.elementAt(Random().nextInt(50))} ${nouns.elementAt(Random().nextInt(50))}';
+  Future<Project> addProject(String projectName) async {
     Project newProject = Project.newWithName(projectName);
 
     projects.add(newProject);
@@ -28,7 +23,7 @@ class AppConfig {
       _appStorage.createNewProjectStorage(newProject.id),
       _appStorage.overwriteProjectManifest(toJson())
     ]);
-    return this;
+    return newProject;
   }
 
   Map<String, dynamic> toJson() =>

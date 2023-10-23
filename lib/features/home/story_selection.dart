@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 class StorySelection extends StatelessWidget {
   final List<Project> storyListing;
 
-  const StorySelection(this.storyListing, {super.key});
+  final Function(Project) _navigateToStory;
+
+  const StorySelection(this.storyListing, this._navigateToStory, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +17,9 @@ class StorySelection extends StatelessWidget {
           crossAxisCount: 3,
           padding: const EdgeInsets.all(20),
           shrinkWrap: true,
-          children:
-              storyListing.map((entry) => StorySelectOption(entry)).toList()),
+          children: storyListing
+              .map((entry) => StorySelectOption(entry, _navigateToStory))
+              .toList()),
     );
   }
 }
