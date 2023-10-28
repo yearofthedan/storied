@@ -1,35 +1,37 @@
-import 'package:storied/config/app_config.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/home/add_story_screen.dart';
 import 'package:storied/features/home/story_selection.dart';
 import 'package:flutter/material.dart';
 import 'package:storied/features/story/story_project_page.dart';
+import 'package:storied/projects.dart';
 
 class HomeScreen extends StatefulWidget {
-  final AppConfig _appConfig;
+  final ProjectStorage _projectStorage;
 
-  const HomeScreen(this._appConfig, {super.key});
+  const HomeScreen(this._projectStorage, {super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Project> _projects = [];
+  Projects? _projects;
 
   @override
   void initState() {
     super.initState();
+    getProjects();
+  }
+
+  Future<void> getProjects() async {
+    var pr = await Projects.fromStorage(widget._projectStorage);
     setState(() {
-      _projects = widget._appConfig.projects;
+      _projects = pr;
     });
   }
 
-  Future<void> _onAddStory(String name) async {
-    var project = await widget._appConfig.addProject(name);
-    setState(() {
-      _projects = widget._appConfig.projects;
-    });
+  Future<void> _onProjectAdded(String name) async {
+    Project project = await _projects!.createProject(name);
     _navigateToStory(project);
   }
 
@@ -37,8 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
+          settings: const RouteSettings(name: 'add-story'),
           fullscreenDialog: true,
-          builder: (context) => AddStory(_onAddStory),
+          builder: (context) => AddStory(_onProjectAdded),
         ));
   }
 
@@ -46,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
+        settings: const RouteSettings(name: 'view-story'),
         builder: (context) => StoryProjectPage(project),
       ),
     );
@@ -55,6 +59,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var colors = Theme.of(context).colorScheme;
     TextTheme text = Theme.of(context).textTheme;
+
+    if (_projects == null) {
+      return Container();
+    }
 
     return Container(
       decoration: BoxDecoration(
@@ -72,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ])),
       child: Scaffold(
           floatingActionButton: FloatingActionButton.extended(
-              onPressed: () => _addProject(),
+              onPressed: _addProject,
               label: const Row(
                 children: [Icon(Icons.add), Text('New')],
               )),
@@ -90,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: TextDecoration.underline),
                     textAlign: TextAlign.center,
                   )),
-              StorySelection(_projects, _navigateToStory),
+              StorySelection(_projects!.projects, _navigateToStory),
               // ,
             ],
           )),

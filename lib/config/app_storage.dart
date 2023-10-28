@@ -5,9 +5,15 @@ import 'package:storied/storage/local_storage_client.dart';
 class AppStorage {
   final LocalStorageClient _localStorageClient;
 
+  dynamic _manifestCache;
+
   AppStorage(this._localStorageClient);
 
-  Future<String> createNewProjectStorage(String projectId) async {
+  warm() async {
+    _manifestCache = await getProjectManifest(force: true);
+  }
+
+  Future<String> createContentFolder(String projectId) async {
     return (await _localStorageClient.createStorageDirectory(projectId)).path;
   }
 
@@ -16,8 +22,18 @@ class AppStorage {
     return getProjectManifest();
   }
 
-  Future<dynamic> getProjectManifest() async {
-    return _localStorageClient.getJsonFromStorage('projects.json');
+  Future<dynamic> getProjectManifest({force = false}) async {
+    if (_manifestCache == null || force) {
+      return _localStorageClient.getJsonFromStorage('projects.json');
+    }
+
+    return _manifestCache;
+  }
+
+  Future<dynamic> getFromManifest(String key) async {
+    dynamic manifestJson = await getProjectManifest();
+
+    return manifestJson['projects'];
   }
 
   Future<String> getProjectRoot(projectId) async {

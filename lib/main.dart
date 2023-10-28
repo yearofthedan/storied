@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:storied/config/app_config.dart';
 import 'package:storied/config/app_storage.dart';
+import 'package:storied/projects.dart';
 import 'package:storied/storage/local_storage_client.dart';
 import 'features/home/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AppConfig config =
-      await AppConfigFactory.loadConfig(AppStorage(LocalStorageClient()));
-  runApp(MyApp(config));
+  AppStorage appStorage = AppStorage(LocalStorageClient());
+  await appStorage.warm();
+  runApp(MyApp(appStorage));
 }
 
 const text = TextTheme(
@@ -31,9 +31,9 @@ final darkTheme = ThemeData.from(
     colorScheme: darkColors, textTheme: text, useMaterial3: true);
 
 class MyApp extends StatelessWidget {
-  final AppConfig _appConfig;
+  final AppStorage _appStorage;
 
-  const MyApp(this._appConfig, {super.key});
+  const MyApp(this._appStorage, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       title: appName,
       darkTheme: darkTheme,
       theme: lightTheme,
-      home: HomeScreen(_appConfig),
+      home: HomeScreen(ProjectStorage(_appStorage)),
     );
   }
 }

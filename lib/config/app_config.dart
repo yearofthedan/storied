@@ -20,7 +20,7 @@ class AppConfig {
 
     projects.add(newProject);
     await Future.wait([
-      _appStorage.createNewProjectStorage(newProject.id),
+      _appStorage.createContentFolder(newProject.id),
       _appStorage.overwriteProjectManifest(toJson())
     ]);
     return newProject;
