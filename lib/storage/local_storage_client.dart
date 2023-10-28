@@ -23,9 +23,7 @@ class LocalStorageClient {
   }
 
   Future<List<String>> getFileNames({type = 'json'}) async {
-    return (await directoryListPaths)
-        .where((path) => path.endsWith('json'))
-        .toList();
+    return (await directoryListPaths).where((path) => path.endsWith('json')).toList();
   }
 
   Future<dynamic> getJsonFileAtPath(String pathToFile) async {
@@ -59,8 +57,7 @@ class LocalStorageClient {
   }
 
   Future<File> writeJsonToStorage(String fileName, dynamic content) async {
-    return writeString(
-        '${await storageDirPath}/$fileName', jsonEncode(content));
+    return writeString('${await storageDirPath}/$fileName', jsonEncode(content));
   }
 
   Future<File> writeJsonFileAtPath(String pathToFile, dynamic content) async {

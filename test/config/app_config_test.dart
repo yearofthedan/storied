@@ -13,16 +13,14 @@ void main() {
 
   group('getConfig', () {
     test('returns projects if they exist', () async {
-      var config = await AppConfigFactory.loadConfig(AppStorage(
-          FakeLocalStorageClient(
-              '{"projects": [{"name":"a project", "id": "123"}]}')));
+      var config = await AppConfigFactory.loadConfig(
+          AppStorage(FakeLocalStorageClient('{"projects": [{"name":"a project", "id": "123"}]}')));
 
       expect(config.projects.length, 1);
     });
 
     test('returns default config if missing', () async {
-      var config = await AppConfigFactory.loadConfig(
-          AppStorage(FakeLocalStorageClient(null)));
+      var config = await AppConfigFactory.loadConfig(AppStorage(FakeLocalStorageClient(null)));
 
       expect(config.projects.length, 0);
     });

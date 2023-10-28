@@ -45,10 +45,8 @@ class AppStorage {
     return _localStorageClient.getJsonFileAtPath('$folder/$fileName');
   }
 
-  Future<File> writeToProjectRoot(
-      String projectId, String fileName, dynamic content) async {
+  Future<File> writeToProjectRoot(String projectId, String fileName, dynamic content) async {
     String folder = await getProjectRoot(projectId);
-    return _localStorageClient.writeJsonFileAtPath(
-        '$folder/$fileName', content);
+    return _localStorageClient.writeJsonFileAtPath('$folder/$fileName', content);
   }
 }

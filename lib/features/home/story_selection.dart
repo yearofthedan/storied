@@ -17,9 +17,7 @@ class StorySelection extends StatelessWidget {
           crossAxisCount: 3,
           padding: const EdgeInsets.all(20),
           shrinkWrap: true,
-          children: storyListing
-              .map((entry) => StorySelectOption(entry, _navigateToStory))
-              .toList()),
+          children: storyListing.map((entry) => StorySelectOption(entry, _navigateToStory)).toList()),
     );
   }
 }

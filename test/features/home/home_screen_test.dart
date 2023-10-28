@@ -8,8 +8,8 @@ import 'package:storied/features/selected_story_state.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/projects.dart';
 
-import '../../_helpers/findExtensions.dart';
-import '../../_helpers/testerExtensions.dart';
+import '../../_helpers/find_extensions.dart';
+import '../../_helpers/tester_extensions.dart';
 
 const root = 'root/com.app';
 
@@ -26,24 +26,20 @@ void main() {
     createWidgetUnderTest(WidgetTester tester, Iterable<Project> projects) async {
       var mockNavigator = TestObserver();
       var fakeProjectStorage = FakeProjectStorage();
-      when(() => fakeProjectStorage.getAll())
-          .thenAnswer((_) => Future.value(List.of(projects)));
+      when(() => fakeProjectStorage.getAll()).thenAnswer((_) => Future.value(List.of(projects)));
 
       await tester.pumpWidget(MaterialApp(
           navigatorObservers: [mockNavigator],
           home: ChangeNotifierProvider(
-            create: (context) =>
-                SelectedStoryState(Project.newWithName('placeholder')),
+            create: (context) => SelectedStoryState(Project.newWithName('placeholder')),
             child: HomeScreen(fakeProjectStorage),
           )));
       await tester.pumpAndSettle();
       return mockNavigator;
     }
 
-    testWidgets('allows navigating to an existing project',
-        (WidgetTester tester) async {
-      var mockNavigator =
-          await createWidgetUnderTest(tester, [Project.newWithName('my story')]);
+    testWidgets('allows navigating to an existing project', (WidgetTester tester) async {
+      var mockNavigator = await createWidgetUnderTest(tester, [Project.newWithName('my story')]);
       expect(find.text('my story'), findsOneWidget);
 
       await tester.tap(find.text('my story'));
@@ -66,10 +62,7 @@ void main() {
 }
 
 void expectCurrRoute(TestObserver mockNavigator, name) {
-  Route? route = verify(
-          () => mockNavigator.didPush(captureAny<MaterialPageRoute>(), any()))
-      .captured
-      .lastOrNull;
+  Route? route = verify(() => mockNavigator.didPush(captureAny<MaterialPageRoute>(), any())).captured.lastOrNull;
 
   expect(route == null, false);
 }

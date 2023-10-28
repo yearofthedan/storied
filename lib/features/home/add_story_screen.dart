@@ -30,15 +30,9 @@ class AddStory extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ResponsiveTextField(
-                  onSubmit: _onAddStory,
-                  label: 'Story name',
-                  controller: controller),
+              ResponsiveTextField(onSubmit: _onAddStory, label: 'Story name', controller: controller),
               SizedBox(height: spacing['2']),
-              ResponsiveFilledButton(
-                  label: getString('CREATE_STORY'),
-                  onSubmit: _onAddStory,
-                  controller: controller)
+              ResponsiveFilledButton(label: getString('CREATE_STORY'), onSubmit: _onAddStory, controller: controller)
             ]),
       ),
     );
@@ -59,8 +53,7 @@ class ResponsiveFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
-        onPressed: () => onSubmit(controller.text), child: Text(label));
+    return FilledButton(onPressed: () => onSubmit(controller.text), child: Text(label));
   }
 }
 

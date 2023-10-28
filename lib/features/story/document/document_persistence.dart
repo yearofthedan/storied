@@ -10,19 +10,15 @@ class DocumentPersistence {
   DocumentPersistence(this.appStorage, this.projectId);
 
   Future<Document> getProjectDocument() async {
-    dynamic result =
-        await appStorage.getFromProjectRoot(projectId, 'document.json');
+    dynamic result = await appStorage.getFromProjectRoot(projectId, 'document.json');
     if (result == null) {
-      await appStorage.writeToProjectRoot(
-          projectId, 'document.json', r'[{"insert":"hello\n"}]');
+      await appStorage.writeToProjectRoot(projectId, 'document.json', r'[{"insert":"hello\n"}]');
     }
 
-    return Document.fromJson(
-        await appStorage.getFromProjectRoot(projectId, 'document.json'));
+    return Document.fromJson(await appStorage.getFromProjectRoot(projectId, 'document.json'));
   }
 
   Future<File> saveDocument(Document document) async {
-    return appStorage.writeToProjectRoot(
-        projectId, 'document.json', document.toDelta().toJson());
+    return appStorage.writeToProjectRoot(projectId, 'document.json', document.toDelta().toJson());
   }
 }

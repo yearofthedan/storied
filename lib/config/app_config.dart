@@ -10,24 +10,18 @@ class AppConfig {
   factory AppConfig.fromJson(AppStorage appStorage, Map<String, dynamic> json) {
     List<dynamic> pr = List<dynamic>.from(json['projects']);
 
-    return AppConfig(appStorage,
-        projects:
-            List<Project>.from(pr.map((e) => Project(e['id'], e['name']))));
+    return AppConfig(appStorage, projects: List<Project>.from(pr.map((e) => Project(e['id'], e['name']))));
   }
 
   Future<Project> addProject(String projectName) async {
     Project newProject = Project.newWithName(projectName);
 
     projects.add(newProject);
-    await Future.wait([
-      _appStorage.createContentFolder(newProject.id),
-      _appStorage.overwriteProjectManifest(toJson())
-    ]);
+    await Future.wait([_appStorage.createContentFolder(newProject.id), _appStorage.overwriteProjectManifest(toJson())]);
     return newProject;
   }
 
-  Map<String, dynamic> toJson() =>
-      {'projects': projects.map((e) => e.toJson()).toList()};
+  Map<String, dynamic> toJson() => {'projects': projects.map((e) => e.toJson()).toList()};
 }
 
 class AppConfigFactory {
@@ -38,8 +32,7 @@ class AppConfigFactory {
 
   static Future<AppConfig> _getAppConfig(AppStorage appStorage) async {
     dynamic json = await appStorage.getProjectManifest() ??
-        await appStorage.overwriteProjectManifest(
-            AppConfig(appStorage, projects: []).toJson());
+        await appStorage.overwriteProjectManifest(AppConfig(appStorage, projects: []).toJson());
     return AppConfig.fromJson(appStorage, json);
   }
 }

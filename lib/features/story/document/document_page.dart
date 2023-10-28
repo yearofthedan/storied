@@ -38,8 +38,7 @@ class _DocumentPageState extends State<DocumentPage> {
     documentPersistence = DocumentPersistence(appStorage, projectId);
     Document doc = await docOrNew(documentPersistence!);
     setState(() {
-      _controller = QuillController(
-          document: doc, selection: const TextSelection.collapsed(offset: 0));
+      _controller = QuillController(document: doc, selection: const TextSelection.collapsed(offset: 0));
     });
   }
 
@@ -53,8 +52,7 @@ class _DocumentPageState extends State<DocumentPage> {
     if (_controller == null) {
       return Container();
     } else {
-      return EditorWidget(_controller!,
-          () => documentPersistence!.saveDocument(_controller!.document));
+      return EditorWidget(_controller!, () => documentPersistence!.saveDocument(_controller!.document));
     }
   }
 }

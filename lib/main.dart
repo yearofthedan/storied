@@ -20,15 +20,11 @@ const text = TextTheme(
   headlineSmall: TextStyle(fontFamily: 'Raleway'),
 );
 
-final lightColors =
-    ColorScheme.fromSeed(seedColor: Colors.green, brightness: Brightness.light);
-final darkColors =
-    ColorScheme.fromSeed(seedColor: Colors.green, brightness: Brightness.dark);
+final lightColors = ColorScheme.fromSeed(seedColor: Colors.green, brightness: Brightness.light);
+final darkColors = ColorScheme.fromSeed(seedColor: Colors.green, brightness: Brightness.dark);
 
-final lightTheme = ThemeData.from(
-    colorScheme: lightColors, textTheme: text, useMaterial3: true);
-final darkTheme = ThemeData.from(
-    colorScheme: darkColors, textTheme: text, useMaterial3: true);
+final lightTheme = ThemeData.from(colorScheme: lightColors, textTheme: text, useMaterial3: true);
+final darkTheme = ThemeData.from(colorScheme: darkColors, textTheme: text, useMaterial3: true);
 
 class MyApp extends StatelessWidget {
   final AppStorage _appStorage;

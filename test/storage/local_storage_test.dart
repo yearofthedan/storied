@@ -36,9 +36,7 @@ class FakeDirectory extends Fake implements Directory {
   @override
   String get path => root;
   @override
-  Stream<FileSystemEntity> list(
-      {bool recursive = false, bool followLinks = true}) {
-    return Stream.fromIterable(
-        [File('$root/file_1.unknown'), File('$root/file_2.json')]);
+  Stream<FileSystemEntity> list({bool recursive = false, bool followLinks = true}) {
+    return Stream.fromIterable([File('$root/file_1.unknown'), File('$root/file_2.json')]);
   }
 }

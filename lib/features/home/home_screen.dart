@@ -66,18 +66,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Container(
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-            colors.primary,
-            Color.fromARGB(
-              colors.primary.alpha,
-              colors.primary.red,
-              colors.primary.green - 30,
-              colors.primary.blue,
-            )
-          ])),
+          gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
+        colors.primary,
+        Color.fromARGB(
+          colors.primary.alpha,
+          colors.primary.red,
+          colors.primary.green - 30,
+          colors.primary.blue,
+        )
+      ])),
       child: Scaffold(
           floatingActionButton: FloatingActionButton.extended(
               onPressed: _addProject,

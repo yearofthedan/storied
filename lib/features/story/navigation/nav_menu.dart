@@ -23,10 +23,8 @@ class NavMenu extends StatelessWidget {
         Expanded(
             child: NavigationRail(
           extended: constraints.maxWidth >= 600,
-          destinations: options
-              .map((e) => NavigationRailDestination(
-                  icon: Icon(e.icon), label: Text(e.label)))
-              .toList(),
+          destinations:
+              options.map((e) => NavigationRailDestination(icon: Icon(e.icon), label: Text(e.label))).toList(),
           onDestinationSelected: onNavChange,
           selectedIndex: selected,
         )),
