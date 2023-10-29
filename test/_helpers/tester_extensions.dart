@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-Future<void> tapAndSettle(WidgetTester tester, Finder newButton) async {
-  await tester.tap(newButton);
-  await tester.pumpAndSettle();
+extension WidgetTesterExtension on WidgetTester {
+  Future<void> tapAndSettle(Finder tappable) async {
+    await tap(tappable);
+    await pumpAndSettle();
+  }
 }

@@ -23,23 +23,28 @@ void main() {
       ));
     });
 
-    createWidgetUnderTest(WidgetTester tester, Iterable<Project> projects) async {
+    createWidgetUnderTest(
+        WidgetTester tester, Iterable<Project> projects) async {
       var mockNavigator = TestObserver();
       var fakeProjectStorage = FakeProjectStorage();
-      when(() => fakeProjectStorage.getAll()).thenAnswer((_) => Future.value(List.of(projects)));
+      when(() => fakeProjectStorage.getAll())
+          .thenAnswer((_) => Future.value(List.of(projects)));
 
       await tester.pumpWidget(MaterialApp(
           navigatorObservers: [mockNavigator],
           home: ChangeNotifierProvider(
-            create: (context) => SelectedStoryState(Project.newWithName('placeholder')),
+            create: (context) =>
+                SelectedStoryState(Project.newWithName('placeholder')),
             child: HomeScreen(fakeProjectStorage),
           )));
       await tester.pumpAndSettle();
       return mockNavigator;
     }
 
-    testWidgets('allows navigating to an existing project', (WidgetTester tester) async {
-      var mockNavigator = await createWidgetUnderTest(tester, [Project.newWithName('my story')]);
+    testWidgets('allows navigating to an existing project',
+        (WidgetTester tester) async {
+      var mockNavigator = await createWidgetUnderTest(
+          tester, [Project.newWithName('my story')]);
       expect(find.text('my story'), findsOneWidget);
 
       await tester.tap(find.text('my story'));
@@ -51,18 +56,21 @@ void main() {
     testWidgets('supports creating a project', (WidgetTester tester) async {
       var mockNavigator = await createWidgetUnderTest(tester, []);
 
-      await tapAndSettle(tester, findByText('New'));
+      await tester.tapAndSettle(find.findByText('New'));
       expectCurrRoute(mockNavigator, 'add-story');
 
-      await tester.enterText(findFieldByText('Story name'), 'testing');
-      await tapAndSettle(tester, findByText(getString('CREATE_STORY')));
+      await tester.enterText(find.findFieldByText('Story name'), 'testing');
+      await tester.tapAndSettle(find.findByText(getString('CREATE_STORY')));
       expectCurrRoute(mockNavigator, 'view-story');
     });
   });
 }
 
 void expectCurrRoute(TestObserver mockNavigator, name) {
-  Route? route = verify(() => mockNavigator.didPush(captureAny<MaterialPageRoute>(), any())).captured.lastOrNull;
+  Route? route = verify(
+          () => mockNavigator.didPush(captureAny<MaterialPageRoute>(), any()))
+      .captured
+      .lastOrNull;
 
   expect(route == null, false);
 }
