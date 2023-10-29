@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'dart:convert';
 import 'package:storied/storage/local_storage_client.dart';
 
 class AppStorage {
@@ -14,17 +13,17 @@ class AppStorage {
   }
 
   Future<String> createContentFolder(String projectId) async {
-    return (await _localStorageClient.createStorageDirectory(projectId)).path;
+    return (await _localStorageClient.createDir(projectId)).path;
   }
 
   Future<dynamic> overwriteProjectManifest(dynamic content) async {
-    await _localStorageClient.writeJsonToStorage('projects.json', content);
+    await _localStorageClient.writeFile('projects.json', jsonEncode(content));
     return getProjectManifest();
   }
 
   Future<dynamic> getProjectManifest({force = false}) async {
     if (_manifestCache == null || force) {
-      return _localStorageClient.getJsonFromStorage('projects.json');
+      return _localStorageClient.getFile('projects.json', decoder: jsonDecode);
     }
 
     return _manifestCache;
@@ -37,16 +36,17 @@ class AppStorage {
   }
 
   Future<String> getProjectRoot(projectId) async {
-    return (await _localStorageClient.createStorageDirectory(projectId)).path;
+    return (await _localStorageClient.createDir(projectId)).path;
   }
 
   Future<dynamic> getFromProjectRoot(projectId, String fileName) async {
-    String folder = await getProjectRoot(projectId);
-    return _localStorageClient.getJsonFileAtPath('$folder/$fileName');
+    return _localStorageClient.getFile('$projectId/$fileName',
+        decoder: jsonDecode);
   }
 
-  Future<File> writeToProjectRoot(String projectId, String fileName, dynamic content) async {
-    String folder = await getProjectRoot(projectId);
-    return _localStorageClient.writeJsonFileAtPath('$folder/$fileName', content);
+  Future<dynamic> writeToProjectRoot(
+      String projectId, String fileName, dynamic content) async {
+    return _localStorageClient.writeFile(
+        '$projectId/$fileName', jsonEncode(content));
   }
 }

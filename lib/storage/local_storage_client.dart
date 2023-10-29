@@ -1,66 +1,58 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
-class LocalStorageClient {
-  Future<Directory> get storageDir async {
+abstract class StorageClient {
+  Future<dynamic> getFile(String path, {Function(String)? decoder});
+  Future<dynamic> createDir(String path);
+  Future<dynamic> writeFile(String path, dynamic data);
+  Future<List<String>> listFiles({String? path});
+}
+
+class LocalStorageClient implements StorageClient {
+  Future<Directory> get _storageDir async {
     final Directory directory = await getApplicationDocumentsDirectory();
     debugPrint('Getting files from ${directory.path}');
 
     return directory;
   }
 
-  Future<String> get storageDirPath async {
-    return (await storageDir).path;
+  Future<String> get _storageDirPath async {
+    return (await _storageDir).path;
   }
 
-  Future<List<String>> get directoryListPaths async {
-    final list = (await storageDir).list(recursive: false, followLinks: false);
-
-    return list.map((file) => file.path).toList();
+  @override
+  Future<List<String>> listFiles({String? path}) async {
+    String resolvedPath = '${await _storageDirPath}/${path ?? ''}';
+    final List<String> list = await Directory(resolvedPath)
+        .list(recursive: false, followLinks: false)
+        .map((file) => file.path.replaceFirst(resolvedPath, ''))
+        .toList();
+    return list;
   }
 
-  Future<List<String>> getFileNames({type = 'json'}) async {
-    return (await directoryListPaths).where((path) => path.endsWith('json')).toList();
-  }
-
-  Future<dynamic> getJsonFileAtPath(String pathToFile) async {
-    var file = File(pathToFile);
+  @override
+  Future<dynamic> getFile(String path, {Function(String)? decoder}) async {
+    var file = File('${await _storageDirPath}/$path');
     if (!file.existsSync()) {
       return null;
     }
-    return jsonDecode(await file.readAsString());
+
+    dynamic data = await file.readAsString();
+    return decoder == null ? data : decoder(data);
   }
 
-  Future<Directory> createStorageDirectory(String dirName) async {
-    Directory newDir = Directory('${await storageDirPath}/$dirName');
+  @override
+  Future<Directory> createDir(String dirName) async {
+    Directory newDir = Directory('${await _storageDirPath}/$dirName');
 
     return newDir.create();
   }
 
-  Future<dynamic> getJsonFromStorage(String fileName) async {
-    File file = File('${await storageDirPath}/$fileName');
-
-    if (!file.existsSync()) {
-      return null;
-    }
-
-    return jsonDecode(await file.readAsString());
-  }
-
-  Future<File> writeString(String fileName, dynamic content) async {
-    final fileRef = File(fileName);
-
-    return fileRef.writeAsString(content);
-  }
-
-  Future<File> writeJsonToStorage(String fileName, dynamic content) async {
-    return writeString('${await storageDirPath}/$fileName', jsonEncode(content));
-  }
-
-  Future<File> writeJsonFileAtPath(String pathToFile, dynamic content) async {
-    return writeString(pathToFile, jsonEncode(content));
+  @override
+  Future<dynamic> writeFile(String path, dynamic data) async {
+    var file = File('${await _storageDirPath}/$path');
+    return file.writeAsString(data);
   }
 }

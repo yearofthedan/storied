@@ -18,16 +18,10 @@ void main() {
       IOOverrides.runZoned(() async {
         final storage = LocalStorageClient();
 
-        var result = await storage.getFileNames(type: 'json ');
+        var result = await storage.listFiles();
 
-        expect(result, ['$root/file_2.json']);
+        expect(result, ['file_2.json']);
       }, createDirectory: (path) => FakeDirectory());
-    });
-
-    test('getApplicationDocumentsDirectory', () async {
-      final storage = LocalStorageClient();
-
-      expect((await storage.storageDir).path, root);
     });
   });
 }
@@ -36,7 +30,8 @@ class FakeDirectory extends Fake implements Directory {
   @override
   String get path => root;
   @override
-  Stream<FileSystemEntity> list({bool recursive = false, bool followLinks = true}) {
-    return Stream.fromIterable([File('$root/file_1.unknown'), File('$root/file_2.json')]);
+  Stream<FileSystemEntity> list(
+      {bool recursive = false, bool followLinks = true}) {
+    return Stream.fromIterable([File('$root/file_2.json')]);
   }
 }
