@@ -1,32 +1,35 @@
 import 'package:storied/config/app_storage.dart';
 import 'package:storied/config/project.dart';
+import 'package:storied/storage/local_storage_client.dart';
 
 class ProjectStorage {
-  final AppStorage _appStorage;
+  final AppConfig _appConfig;
+  final StorageClient _storageClient;
 
-  ProjectStorage(this._appStorage);
+  ProjectStorage(this._appConfig, this._storageClient);
 
   Future<void> add(Project project) {
-    return _appStorage.createContentFolder(project.id);
+    return _storageClient.createDir(project.id);
   }
 
   Future<List<Project>> getAll() async {
-    dynamic data = await _appStorage.getFromManifest('projects');
-    return List<dynamic>.from(data).map((e) => Project.fromJson(e)).toList();
+    return List<dynamic>.from(_appConfig.projects)
+        .map((e) => Project.fromJson(e))
+        .toList();
   }
 }
 
 class Projects {
   final ProjectStorage _projectStorage;
-  final List<Project> projects;
+  final List<Project> projectList;
 
-  Projects(this.projects, this._projectStorage);
+  Projects(this.projectList, this._projectStorage);
 
   Future<Project> createProject(String projectName) async {
     Project newProject = Project.newWithName(projectName);
 
     await _projectStorage.add(newProject);
-    projects.add(newProject);
+    projectList.add(newProject);
 
     return newProject;
   }

@@ -1,3 +1,4 @@
+import 'package:storied/common/get_it.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/home/add_story_screen.dart';
 import 'package:storied/features/home/story_selection.dart';
@@ -6,9 +7,7 @@ import 'package:storied/features/story/story_project_page.dart';
 import 'package:storied/projects.dart';
 
 class HomeScreen extends StatefulWidget {
-  final ProjectStorage _projectStorage;
-
-  const HomeScreen(this._projectStorage, {super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -24,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> getProjects() async {
-    var pr = await Projects.fromStorage(widget._projectStorage);
+    var pr = await getIt.getAsync<Projects>();
     setState(() {
       _projects = pr;
     });
@@ -66,15 +65,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Container(
       decoration: BoxDecoration(
-          gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
-        colors.primary,
-        Color.fromARGB(
-          colors.primary.alpha,
-          colors.primary.red,
-          colors.primary.green - 30,
-          colors.primary.blue,
-        )
-      ])),
+          gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+            colors.primary,
+            Color.fromARGB(
+              colors.primary.alpha,
+              colors.primary.red,
+              colors.primary.green - 30,
+              colors.primary.blue,
+            )
+          ])),
       child: Scaffold(
           floatingActionButton: FloatingActionButton.extended(
               onPressed: _addProject,
@@ -95,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         decoration: TextDecoration.underline),
                     textAlign: TextAlign.center,
                   )),
-              StorySelection(_projects!.projects, _navigateToStory),
+              StorySelection(_projects!.projectList, _navigateToStory),
               // ,
             ],
           )),

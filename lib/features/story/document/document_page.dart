@@ -34,11 +34,12 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   Future<void> _loadFromAssets(String projectId) async {
-    AppStorage appStorage = AppStorage(LocalStorageClient());
+    AppConfig appStorage = AppConfig(LocalStorageClient());
     documentPersistence = DocumentPersistence(appStorage, projectId);
     Document doc = await docOrNew(documentPersistence!);
     setState(() {
-      _controller = QuillController(document: doc, selection: const TextSelection.collapsed(offset: 0));
+      _controller = QuillController(
+          document: doc, selection: const TextSelection.collapsed(offset: 0));
     });
   }
 
@@ -52,7 +53,8 @@ class _DocumentPageState extends State<DocumentPage> {
     if (_controller == null) {
       return Container();
     } else {
-      return EditorWidget(_controller!, () => documentPersistence!.saveDocument(_controller!.document));
+      return EditorWidget(_controller!,
+          () => documentPersistence!.saveDocument(_controller!.document));
     }
   }
 }

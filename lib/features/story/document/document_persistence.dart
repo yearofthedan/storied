@@ -3,7 +3,7 @@ import 'package:storied/config/app_storage.dart';
 
 class DocumentPersistence {
   String projectId;
-  AppStorage appStorage;
+  AppConfig appStorage;
 
   DocumentPersistence(this.appStorage, this.projectId);
 

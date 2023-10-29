@@ -1,29 +1,33 @@
 import 'dart:convert';
 import 'package:storied/storage/local_storage_client.dart';
 
-class AppStorage {
-  final LocalStorageClient _localStorageClient;
+class AppConfig {
+  final StorageClient _storageClient;
+
+  List<dynamic> projects = List.of([]);
 
   dynamic _manifestCache;
 
-  AppStorage(this._localStorageClient);
+  AppConfig(this._storageClient);
 
-  warm() async {
+  Future<AppConfig> warm() async {
     _manifestCache = await getProjectManifest(force: true);
+    projects = await getFromManifest('projects');
+    return this;
   }
 
   Future<String> createContentFolder(String projectId) async {
-    return (await _localStorageClient.createDir(projectId)).path;
+    return (await _storageClient.createDir(projectId)).path;
   }
 
   Future<dynamic> overwriteProjectManifest(dynamic content) async {
-    await _localStorageClient.writeFile('projects.json', jsonEncode(content));
+    await _storageClient.writeFile('projects.json', jsonEncode(content));
     return getProjectManifest();
   }
 
   Future<dynamic> getProjectManifest({force = false}) async {
     if (_manifestCache == null || force) {
-      return _localStorageClient.getFile('projects.json', decoder: jsonDecode);
+      return _storageClient.getFile('projects.json', decoder: jsonDecode);
     }
 
     return _manifestCache;
@@ -32,21 +36,20 @@ class AppStorage {
   Future<dynamic> getFromManifest(String key) async {
     dynamic manifestJson = await getProjectManifest();
 
-    return manifestJson['projects'];
+    return manifestJson[key];
   }
 
   Future<String> getProjectRoot(projectId) async {
-    return (await _localStorageClient.createDir(projectId)).path;
+    return (await _storageClient.createDir(projectId)).path;
   }
 
   Future<dynamic> getFromProjectRoot(projectId, String fileName) async {
-    return _localStorageClient.getFile('$projectId/$fileName',
-        decoder: jsonDecode);
+    return _storageClient.getFile('$projectId/$fileName', decoder: jsonDecode);
   }
 
   Future<dynamic> writeToProjectRoot(
       String projectId, String fileName, dynamic content) async {
-    return _localStorageClient.writeFile(
+    return _storageClient.writeFile(
         '$projectId/$fileName', jsonEncode(content));
   }
 }
