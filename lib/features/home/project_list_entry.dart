@@ -1,15 +1,15 @@
 import 'package:storied/config/project.dart';
 import 'package:flutter/material.dart';
 
-class StorySelectOption extends StatelessWidget {
+class ProjectListEntry extends StatelessWidget {
   final Project project;
-  final Function(Project) _navigateToStory;
+  final Function(Project) _navigateToProject;
 
-  const StorySelectOption(this.project, this._navigateToStory, {super.key});
+  const ProjectListEntry(this.project, this._navigateToProject, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    onNavigate() => _navigateToStory(project);
+    onNavigate() => _navigateToProject(project);
 
     return Card(
       elevation: 0,

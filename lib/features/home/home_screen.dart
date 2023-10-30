@@ -1,17 +1,17 @@
 import 'package:storied/config/project.dart';
-import 'package:storied/features/home/add_story_screen.dart';
-import 'package:storied/features/home/story_selection.dart';
+import 'package:storied/features/home/add_project_screen.dart';
+import 'package:storied/features/home/project_list.dart';
 import 'package:flutter/material.dart';
-import 'package:storied/features/story/story_project_page.dart';
+import 'package:storied/features/project/project_screen.dart';
 import 'package:storied/projects.dart';
 import 'package:watch_it/watch_it.dart';
 
-navToViewProject(BuildContext context, Project project) {
+navToProject(BuildContext context, Project project) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      settings: const RouteSettings(name: 'view-story'),
-      builder: (_) => StoryProjectPage(project),
+      settings: const RouteSettings(name: 'open-project'),
+      builder: (_) => ProjectScreen(project),
     ),
   );
 }
@@ -20,9 +20,9 @@ navToAddProject(BuildContext context, Function(Project) onAdded) {
   Navigator.push(
       context,
       MaterialPageRoute(
-        settings: const RouteSettings(name: 'add-story'),
+        settings: const RouteSettings(name: 'add-project'),
         fullscreenDialog: true,
-        builder: (_) => AddStory(onAdded),
+        builder: (_) => AddProjectScreen(onAdded),
       ));
 }
 
@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget with WatchItMixin {
     final List<Project> projectList =
         watchPropertyValue<Projects, List<Project>>((p) => p.projectList);
 
-    navigateToProject(Project project) => navToViewProject(context, project);
+    navigateToProject(Project project) => navToProject(context, project);
     navigateToCreate() => navToAddProject(context, navigateToProject);
 
     return Container(
@@ -73,7 +73,7 @@ class HomeScreen extends StatelessWidget with WatchItMixin {
                         decoration: TextDecoration.underline),
                     textAlign: TextAlign.center,
                   )),
-              StorySelection(projectList, navigateToProject),
+              ProjectList(projectList, navigateToProject),
               // ,
             ],
           )),

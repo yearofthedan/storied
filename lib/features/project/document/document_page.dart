@@ -1,6 +1,6 @@
 import 'package:storied/config/app_storage.dart';
 import 'package:storied/config/project.dart';
-import 'package:storied/features/story/document/document_persistence.dart';
+import 'package:storied/features/project/document/document_persistence.dart';
 import 'package:storied/features/selected_story_state.dart';
 import 'package:storied/storage/local_storage_client.dart';
 import 'package:storied/widgets/editor.dart';

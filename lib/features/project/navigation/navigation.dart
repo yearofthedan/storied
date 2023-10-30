@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:storied/features/story/document/document_page.dart';
-import 'package:storied/features/story/navigation/nav_menu.dart';
-import 'package:storied/features/story/navigation/nav_options.dart';
+import 'package:storied/features/project/document/document_page.dart';
+import 'package:storied/features/project/navigation/nav_menu.dart';
+import 'package:storied/features/project/navigation/nav_options.dart';
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});

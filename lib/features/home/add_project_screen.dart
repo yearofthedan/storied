@@ -8,10 +8,10 @@ import 'package:storied/common/spacing.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/projects.dart';
 
-class AddStory extends StatelessWidget {
+class AddProjectScreen extends StatelessWidget {
   final Function(Project) _onAdded;
 
-  const AddStory(this._onAdded, {super.key});
+  const AddProjectScreen(this._onAdded, {super.key});
 
   _genTitle() {
     return '${nouns.elementAt(Random().nextInt(50))} ${nouns.elementAt(Random().nextInt(50))}';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/selected_story_state.dart';
-import 'package:storied/features/story/navigation/nav_options.dart';
+import 'package:storied/features/project/navigation/nav_options.dart';
 
 class NavMenu extends StatelessWidget {
   final Function(int) onNavChange;
@@ -23,8 +23,10 @@ class NavMenu extends StatelessWidget {
         Expanded(
             child: NavigationRail(
           extended: constraints.maxWidth >= 600,
-          destinations:
-              options.map((e) => NavigationRailDestination(icon: Icon(e.icon), label: Text(e.label))).toList(),
+          destinations: options
+              .map((e) => NavigationRailDestination(
+                  icon: Icon(e.icon), label: Text(e.label)))
+              .toList(),
           onDestinationSelected: onNavChange,
           selectedIndex: selected,
         )),

@@ -53,18 +53,18 @@ void main() {
       await tester.tap(find.text('my story'));
       await tester.pump();
 
-      expectCurrRoute(mockNavigator, 'view-story');
+      expectCurrRoute(mockNavigator, 'open-project');
     });
 
     testWidgets('supports creating a project', (WidgetTester tester) async {
       var mockNavigator = await createWidgetUnderTest(tester, []);
 
       await tester.tapAndSettle(find.findByText('New'));
-      expectCurrRoute(mockNavigator, 'add-story');
+      expectCurrRoute(mockNavigator, 'add-project');
 
       await tester.enterText(find.findFieldByText('Story name'), 'testing');
       await tester.tapAndSettle(find.findByText(getString('CREATE_STORY')));
-      expectCurrRoute(mockNavigator, 'view-story');
+      expectCurrRoute(mockNavigator, 'open-project');
     });
   });
 }

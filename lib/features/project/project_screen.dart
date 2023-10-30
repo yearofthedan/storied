@@ -2,12 +2,12 @@ import 'package:provider/provider.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/selected_story_state.dart';
 import 'package:flutter/material.dart';
-import 'package:storied/features/story/navigation/navigation.dart';
+import 'package:storied/features/project/navigation/navigation.dart';
 
-class StoryProjectPage extends StatelessWidget {
+class ProjectScreen extends StatelessWidget {
   final Project _project;
 
-  const StoryProjectPage(this._project, {super.key});
+  const ProjectScreen(this._project, {super.key});
 
   @override
   Widget build(BuildContext context) {
