@@ -1,14 +1,17 @@
 import 'dart:math';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
+import 'package:storied/common/get_it.dart';
 import 'package:storied/common/strings.dart';
 import 'package:storied/common/responsiveness.dart';
 import 'package:storied/common/spacing.dart';
+import 'package:storied/config/project.dart';
+import 'package:storied/projects.dart';
 
 class AddStory extends StatelessWidget {
-  final Function(String) _onAddStory;
+  final Function(Project) _onAdded;
 
-  const AddStory(this._onAddStory, {super.key});
+  const AddStory(this._onAdded, {super.key});
 
   _genTitle() {
     return '${nouns.elementAt(Random().nextInt(50))} ${nouns.elementAt(Random().nextInt(50))}';
@@ -17,6 +20,11 @@ class AddStory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = TextEditingController(text: _genTitle());
+
+    onSubmit(String value) async {
+      Project project = await getIt<Projects>().createProject(value);
+      _onAdded(project);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -30,9 +38,15 @@ class AddStory extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ResponsiveTextField(onSubmit: _onAddStory, label: 'Story name', controller: controller),
+              ResponsiveTextField(
+                  onSubmit: onSubmit,
+                  label: 'Story name',
+                  controller: controller),
               SizedBox(height: spacing['2']),
-              ResponsiveFilledButton(label: getString('CREATE_STORY'), onSubmit: _onAddStory, controller: controller)
+              ResponsiveFilledButton(
+                  label: getString('CREATE_STORY'),
+                  onSubmit: onSubmit,
+                  controller: controller)
             ]),
       ),
     );
@@ -53,7 +67,8 @@ class ResponsiveFilledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(onPressed: () => onSubmit(controller.text), child: Text(label));
+    return FilledButton(
+        onPressed: () => onSubmit(controller.text), child: Text(label));
   }
 }
 

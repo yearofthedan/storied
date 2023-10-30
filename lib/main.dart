@@ -6,8 +6,7 @@ import 'features/home/home_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initGetIt();
-  var appStorage = getIt<AppConfig>();
-  await appStorage.warm();
+  await getIt.getAsync<AppConfig>();
   runApp(const MyApp());
 }
 

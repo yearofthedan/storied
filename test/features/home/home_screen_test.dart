@@ -27,11 +27,9 @@ void main() {
 
     createWidgetUnderTest(
         WidgetTester tester, Iterable<Project> projects) async {
-      getIt.registerFactoryAsync<Projects>(() {
-        var fakeProjectStorage = FakeProjectStorage();
-        when(() => fakeProjectStorage.getAll())
-            .thenAnswer((_) => Future.value(List.of(projects)));
-        return Projects.fromStorage(fakeProjectStorage);
+      getIt.registerSingleton<ProjectStorage>(FakeProjectStorage());
+      getIt.registerFactory<Projects>(() {
+        return Projects(List.of(projects));
       });
 
       var mockNavigator = TestObserver();

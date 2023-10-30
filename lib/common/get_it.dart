@@ -7,11 +7,13 @@ GetIt getIt = GetIt.instance;
 
 initGetIt() async {
   getIt.registerSingleton<StorageClient>(LocalStorageClient());
-  // getIt.registerSingleton(AppConfig(getIt<StorageClient>()));
-
   getIt.registerSingletonAsync<AppConfig>(
       () => AppConfig(getIt<StorageClient>()).warm());
 
-  getIt.registerFactoryAsync<Projects>(() => Projects.fromStorage(
-      ProjectStorage(getIt<AppConfig>(), getIt<StorageClient>())));
+  getIt.registerSingletonWithDependencies<ProjectStorage>(
+      () => ProjectStorage(),
+      dependsOn: [AppConfig]);
+
+  getIt.registerSingletonAsync(() => Projects.fromStorage(),
+      dependsOn: [ProjectStorage]);
 }
