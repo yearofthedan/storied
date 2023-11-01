@@ -1,14 +1,13 @@
+import 'package:storied/common/get_it.dart';
 import 'package:storied/config/app_storage.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/project/document/document_persistence.dart';
-import 'package:storied/projects.dart';
 import 'package:storied/storage/local_storage_client.dart';
 import 'package:storied/widgets/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:watch_it/watch_it.dart';
 
-class DocumentPage extends WatchingStatefulWidget {
+class DocumentPage extends StatefulWidget {
   const DocumentPage({super.key});
 
   @override
@@ -40,11 +39,7 @@ class _DocumentPageState extends State<DocumentPage> {
 
   @override
   Widget build(BuildContext context) {
-    Project? project = watchValue<Projects, Project?>((p0) => p0.active);
-
-    if (project == null) {
-      return Container();
-    }
+    Project project = getIt<Project>();
 
     if (_controller == null) {
       _loadFromAssets(project.id);

@@ -9,6 +9,7 @@ class NavMenu extends StatelessWidget {
   const NavMenu({super.key, required this.header, required this.navOptions});
 
   returnToHome(context) {
+    getIt.popScope();
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 

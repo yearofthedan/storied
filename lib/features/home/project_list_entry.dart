@@ -23,10 +23,12 @@ class ProjectListEntry extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ListTile(
-              title: Text(project.name),
-              subtitle: const Text('select to see more'),
-              onTap: onNavigate,
+            Expanded(
+              child: ListTile(
+                title: Text(project.name),
+                subtitle: const Text('select to see more'),
+                onTap: onNavigate,
+              ),
             ),
             TextButton(onPressed: onNavigate, child: const Text('view')),
           ]),

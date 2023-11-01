@@ -1,4 +1,3 @@
-import 'package:storied/common/get_it.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/home/add_project_screen.dart';
 import 'package:storied/features/home/project_list.dart';
@@ -8,7 +7,6 @@ import 'package:storied/projects.dart';
 import 'package:watch_it/watch_it.dart';
 
 navToProject(BuildContext context, Project project) {
-  getIt<Projects>().setActive(project);
   Navigator.push(
     context,
     MaterialPageRoute(

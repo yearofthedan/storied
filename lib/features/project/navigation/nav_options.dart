@@ -17,7 +17,7 @@ class NavOptions {
   NavOptions() {
     entries = List.of([
       NavEntry(const DocumentPage(), 'Document', Icons.edit, select),
-      NavEntry(const DocumentPage(), 'Document', Icons.edit, select),
+      NavEntry(const DocumentPage(), 'Settings', Icons.settings, select),
     ]);
     selected = ValueNotifier(0);
   }

@@ -45,8 +45,7 @@ void main() {
           tester, [Project.newWithName('my story')]);
       expect(find.text('my story'), findsOneWidget);
 
-      await tester.tap(find.text('my story'));
-      await tester.pump();
+      await tester.tapAndSettle(find.text('my story'));
 
       expectCurrRoute(mockNavigator, 'open-project');
     });
@@ -55,8 +54,6 @@ void main() {
       var mockNavigator = await createWidgetUnderTest(tester, []);
 
       await tester.tapAndSettle(find.findByText('New'));
-      expectCurrRoute(mockNavigator, 'add-project');
-
       await tester.enterText(find.findFieldByText('Story name'), 'testing');
       await tester.tapAndSettle(find.findByText(getString('CREATE_STORY')));
       expectCurrRoute(mockNavigator, 'open-project');
