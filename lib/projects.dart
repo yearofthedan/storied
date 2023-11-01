@@ -26,6 +26,8 @@ class ProjectStorage {
 class Projects extends ChangeNotifier {
   final List<Project> projectList;
 
+  ValueNotifier<Project?> active = ValueNotifier(null);
+
   Projects(List<Project> initialList) : projectList = initialList;
 
   Future<Project> createProject(String projectName) async {
@@ -41,5 +43,9 @@ class Projects extends ChangeNotifier {
     List<Project> storedProjects = await getIt<ProjectStorage>().getAll();
     var projects = Projects(storedProjects);
     return projects;
+  }
+
+  void setActive(Project project) {
+    active.value = project;
   }
 }

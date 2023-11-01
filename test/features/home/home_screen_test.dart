@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/common/strings.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/home/home_screen.dart';
-import 'package:storied/features/selected_story_state.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/projects.dart';
 
@@ -34,12 +32,9 @@ void main() {
 
       var mockNavigator = TestObserver();
       await tester.pumpWidget(MaterialApp(
-          navigatorObservers: [mockNavigator],
-          home: ChangeNotifierProvider(
-            create: (context) =>
-                SelectedStoryState(Project.newWithName('placeholder')),
-            child: const HomeScreen(),
-          )));
+        navigatorObservers: [mockNavigator],
+        home: const HomeScreen(),
+      ));
       await tester.pumpAndSettle();
       return mockNavigator;
     }

@@ -1,14 +1,14 @@
 import 'package:storied/config/app_storage.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/project/document/document_persistence.dart';
-import 'package:storied/features/selected_story_state.dart';
+import 'package:storied/projects.dart';
 import 'package:storied/storage/local_storage_client.dart';
 import 'package:storied/widgets/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:provider/provider.dart';
+import 'package:watch_it/watch_it.dart';
 
-class DocumentPage extends StatefulWidget {
+class DocumentPage extends WatchingStatefulWidget {
   const DocumentPage({super.key});
 
   @override
@@ -18,11 +18,6 @@ class DocumentPage extends StatefulWidget {
 class _DocumentPageState extends State<DocumentPage> {
   QuillController? _controller;
   DocumentPersistence? documentPersistence;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   docOrNew(DocumentPersistence persistence) async {
     try {
@@ -45,7 +40,12 @@ class _DocumentPageState extends State<DocumentPage> {
 
   @override
   Widget build(BuildContext context) {
-    Project project = context.watch<SelectedStoryState>().project;
+    Project? project = watchValue<Projects, Project?>((p0) => p0.active);
+
+    if (project == null) {
+      return Container();
+    }
+
     if (_controller == null) {
       _loadFromAssets(project.id);
     }

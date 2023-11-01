@@ -1,45 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:storied/features/project/document/document_page.dart';
+import 'package:storied/common/get_it.dart';
+import 'package:storied/config/project.dart';
 import 'package:storied/features/project/navigation/nav_menu.dart';
 import 'package:storied/features/project/navigation/nav_options.dart';
 
-class Navigation extends StatefulWidget {
-  const Navigation({super.key});
+class Navigation extends StatelessWidget {
+  final Project _project;
 
-  @override
-  State<Navigation> createState() => _NavigationState();
-}
-
-class _NavigationState extends State<Navigation> {
-  int selectedIndex = 0;
-
-  updateIndex(int value) {
-    setState(() => selectedIndex = value);
+  Navigation(this._project, {super.key}) {
+    getIt.registerSingleton<NavOptions>(NavOptions());
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<NavEntry> navEntries = [
-      NavEntry(const DocumentPage(), 'Document', Icons.edit, updateIndex),
-      NavEntry(const DocumentPage(), 'Document', Icons.edit, updateIndex),
-      // NavEntry(Container(), 'Exit', Icons.arrow_back, returnToHome),
-    ];
-
-    Widget page = navEntries[selectedIndex].component;
-
+    var navOptions = NavOptions();
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
         body: Row(
           children: [
-            SafeArea(child: NavMenu(selectedIndex, navEntries, updateIndex)),
+            SafeArea(
+                child: NavMenu(
+              header: CurrentProjectHeader(_project),
+              navOptions: navOptions,
+            )),
             Expanded(
                 child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,
-              child: page,
+              child: ValueListenableBuilder<int>(
+                valueListenable: navOptions.selected,
+                builder: (BuildContext context, int value, child) {
+                  return navOptions.getOption(value).component;
+                },
+              ),
             ))
           ],
         ),
       );
     });
+  }
+}
+
+class CurrentProjectHeader extends StatelessWidget {
+  final Project _project;
+
+  const CurrentProjectHeader(this._project, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(_project.name);
   }
 }
