@@ -7,9 +7,11 @@ class ProjectScreen extends StatelessWidget {
   final Project _project;
 
   ProjectScreen(this._project, {super.key}) {
-    getIt.pushNewScope(
-        init: (c) => c.registerSingleton<Project>(_project),
-        scopeName: _project.id);
+    if (!getIt.hasScope(_project.id)) {
+      getIt.pushNewScope(
+          init: (c) => c.registerSingleton<Project>(_project),
+          scopeName: _project.id);
+    }
   }
 
   @override

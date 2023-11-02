@@ -7,8 +7,11 @@ import 'package:storied/features/project/navigation/nav_options.dart';
 class Navigation extends StatelessWidget {
   final Project _project;
 
-  Navigation(this._project, {super.key}) {
-    getIt.registerSingleton<NavOptions>(NavOptions());
+  const Navigation(this._project, {super.key});
+
+  _returnToHome(BuildContext context) {
+    getIt.popScope();
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   @override
@@ -16,6 +19,17 @@ class Navigation extends StatelessWidget {
     var navOptions = NavOptions();
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 40,
+          title: Text(_project.name),
+          leadingWidth: 80,
+          leading: TextButton(
+            onPressed: () {
+              _returnToHome(context);
+            },
+            child: const Text('Exit'),
+          ),
+        ),
         body: Row(
           children: [
             SafeArea(

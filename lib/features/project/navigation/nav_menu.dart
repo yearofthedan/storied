@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:storied/common/get_it.dart';
 import 'package:storied/features/project/navigation/nav_options.dart';
 
 class NavMenu extends StatelessWidget {
@@ -8,28 +7,21 @@ class NavMenu extends StatelessWidget {
 
   const NavMenu({super.key, required this.header, required this.navOptions});
 
-  returnToHome(context) {
-    getIt.popScope();
-    Navigator.popUntil(context, (route) => route.isFirst);
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      var navDestinations = getIt<NavOptions>()
-          .entries
+      var navDestinations = navOptions.entries
           .map((e) => NavigationRailDestination(
               icon: Icon(e.icon), label: Text(e.label)))
           .toList();
 
       return Column(children: [
-        SizedBox(width: 200, child: header),
         Expanded(
           child: ValueListenableBuilder<int>(
             valueListenable: navOptions.selected,
             builder: (BuildContext context, int value, child) {
               return NavigationRail(
-                extended: constraints.maxWidth >= 600,
+                labelType: NavigationRailLabelType.all,
                 destinations: navDestinations,
                 onDestinationSelected: navOptions.select,
                 selectedIndex: value,
@@ -37,12 +29,6 @@ class NavMenu extends StatelessWidget {
             },
           ),
         ),
-        OutlinedButton(
-          onPressed: () {
-            returnToHome(context);
-          },
-          child: const Text('Exit'),
-        )
       ]);
     });
   }
