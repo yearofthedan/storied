@@ -4,6 +4,7 @@ import 'package:storied/_test_helpers/find_extensions.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/project.dart';
+import 'package:storied/domain/project_storage.dart';
 import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/features/home/home_screen.dart';
 import 'package:mocktail/mocktail.dart';
@@ -55,7 +56,8 @@ void main() {
       var mockNavigator = await createWidgetUnderTest(tester, []);
 
       await tester.tapAndSettle(find.findByText(createProjectActionLabel));
-      await tester.enterText(find.findFieldByText(projectNameField), 'testing');
+      await tester.enterText(
+          find.findWidgetByText(projectNameField), 'testing');
       await tester.tapAndSettle(find.findByText(saveNewProjectLabel));
       expectCurrRoute(mockNavigator, routeKey);
     });

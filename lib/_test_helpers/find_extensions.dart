@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_test/flutter_test.dart';
 
 extension CommonFindersExtension on CommonFinders {
@@ -9,8 +8,8 @@ extension CommonFindersExtension on CommonFinders {
     return result;
   }
 
-  Finder findFieldByText(text) {
-    var result = widgetWithText(TextField, text);
+  Finder findWidgetByText(text, {type = TextField}) {
+    var result = widgetWithText(type, text);
     expect(result, findsOneWidget);
     return result;
   }

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:storied/common/storage/app_storage.dart';
+import 'package:storied/domain/project_storage.dart';
 import 'package:storied/domain/projects.dart';
 import 'package:storied/common/storage/clients/local_storage_client.dart';
 

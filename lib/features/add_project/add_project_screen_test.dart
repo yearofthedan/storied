@@ -4,11 +4,10 @@ import 'package:storied/_test_helpers/find_extensions.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/project.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:storied/domain/project_storage.dart';
-import 'package:storied/features/home/terms.dart';
-import 'package:storied/features/project/navigation/terms.dart';
-import 'package:storied/main.dart';
+import 'package:storied/features/add_project/add_project_screen.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/domain/projects.dart';
 
 const root = 'root/com.app';
@@ -16,30 +15,39 @@ const root = 'root/com.app';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('app', () {
+  group(AddProjectScreen, () {
+    Project? added;
+
     setUp(() async {
       getIt.reset();
+      registerFallbackValue(MaterialPageRoute(
+        builder: (context) => Container(),
+      ));
     });
 
     createWidgetUnderTest(WidgetTester tester) async {
       getIt.registerSingleton<ProjectStorage>(FakeProjectStorage());
       getIt.registerFactory<Projects>(() {
-        return Projects(List.of([Project.newWithName('sample project')]));
+        return Projects([]);
       });
-      await tester.pumpWidget(const MyApp());
+
+      onAdded(Project project) => {added = project};
+
+      await tester.pumpWidget(MaterialApp(
+        home: AddProjectScreen(onAdded),
+      ));
       await tester.pumpAndSettle();
     }
 
-    testWidgets('allows opening and closing a project',
-        (WidgetTester tester) async {
+    testWidgets('allows adding a project', (WidgetTester tester) async {
       await createWidgetUnderTest(tester);
-      find.findByText(appTitleDisplayText);
 
-      await tester.tapAndSettle(find.text('sample project'));
-      find.findByText(appTitleDisplayText, count: 0);
+      var field = find.findWidgetByText(projectNameField);
+      await tester.enterText(field, 'my project');
 
-      await tester.tapAndSettle(find.text(exitProjectActionLabel));
-      find.findByText(appTitleDisplayText);
+      await tester.tapAndSettle(find.findByText(saveNewProjectLabel));
+
+      expect(added?.name, 'my project');
     });
   });
 }
@@ -50,5 +58,3 @@ class FakeProjectStorage extends Mock implements ProjectStorage {
     return Future.value();
   }
 }
-
-class TestObserver extends Mock implements NavigatorObserver {}

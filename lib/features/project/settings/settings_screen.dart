@@ -6,11 +6,13 @@ import 'package:storied/features/project/settings/terms.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
-  void alertDialog(BuildContext context) {
+  void alertDialog(BuildContext context, Project project) {
     var alert = AlertDialog(
       actions: [
         OutlinedButton(
-            onPressed: () {},
+            onPressed: () {
+              project.delete();
+            },
             child: const Text(deleteProjectConfirmActionLabel)),
         FilledButton(
             onPressed: () {
@@ -36,7 +38,7 @@ class SettingsScreen extends StatelessWidget {
             subtitle: Text(project.name),
           ),
           ListTile(
-            onTap: () => alertDialog(context),
+            onTap: () => alertDialog(context, project),
             title: const Text(deleteProjectActionLabel),
             trailing: const Icon(Icons.delete),
           ),
