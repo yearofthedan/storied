@@ -6,7 +6,6 @@ import 'package:storied/domain/project.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/features/project/navigation/terms.dart';
 import 'package:storied/features/project/project_screen.dart';
-import 'package:storied/projects.dart';
 
 const root = 'root/com.app';
 
@@ -48,13 +47,6 @@ void expectCurrRoute(TestObserver mockNavigator, name) {
       .lastOrNull;
 
   expect(route == null, false);
-}
-
-class FakeProjectStorage extends Mock implements ProjectStorage {
-  @override
-  Future<void> add(Project project) {
-    return Future.value();
-  }
 }
 
 class TestObserver extends Mock implements NavigatorObserver {}

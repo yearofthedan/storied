@@ -27,7 +27,7 @@ class AppConfig {
 
   Future<dynamic> getProjectManifest({force = false}) async {
     if (_manifestCache == null || force) {
-      return _storageClient.getFile('projects.json', decoder: jsonDecode);
+      return _storageClient.getFileData('projects.json', decoder: jsonDecode);
     }
 
     return _manifestCache;
@@ -44,7 +44,8 @@ class AppConfig {
   }
 
   Future<dynamic> getFromProjectRoot(projectId, String fileName) async {
-    return _storageClient.getFile('$projectId/$fileName', decoder: jsonDecode);
+    return _storageClient.getFileData('$projectId/$fileName',
+        decoder: jsonDecode);
   }
 
   Future<dynamic> writeToProjectRoot(

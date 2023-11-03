@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 abstract class StorageClient {
-  Future<dynamic> getFile(String path, {Function(String)? decoder});
+  Future<dynamic> getFileData(String path, {Function(String)? decoder});
   Future<dynamic> createDir(String path);
   Future<dynamic> writeFile(String path, dynamic data);
   Future<List<String>> listFiles({String? path});
@@ -33,7 +33,7 @@ class LocalStorageClient implements StorageClient {
   }
 
   @override
-  Future<dynamic> getFile(String path, {Function(String)? decoder}) async {
+  Future<dynamic> getFileData(String path, {Function(String)? decoder}) async {
     var file = File('${await _storageDirPath}/$path');
     if (!file.existsSync()) {
       return null;
@@ -51,7 +51,7 @@ class LocalStorageClient implements StorageClient {
   }
 
   @override
-  Future<dynamic> writeFile(String path, dynamic data) async {
+  Future<File> writeFile(String path, dynamic data) async {
     var file = File('${await _storageDirPath}/$path');
     return file.writeAsString(data);
   }
