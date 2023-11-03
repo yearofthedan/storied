@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:storied/common/storage/local_storage_client.dart';
+import 'package:storied/common/storage/clients/local_storage_client.dart';
 
 class AppConfig {
   final StorageClient _storageClient;

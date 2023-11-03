@@ -1,4 +1,5 @@
-import 'package:storied/config/project.dart';
+import 'package:storied/domain/project.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uuid/uuid.dart';
 

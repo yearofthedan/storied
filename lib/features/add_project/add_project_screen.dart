@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/common/styling/responsiveness.dart';
 import 'package:storied/common/styling/spacing.dart';
-import 'package:storied/config/project.dart';
+import 'package:storied/domain/project.dart';
 import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/projects.dart';
 

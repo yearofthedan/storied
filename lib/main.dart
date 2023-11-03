@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
-import 'package:storied/config/app_storage.dart';
+import 'package:storied/common/storage/app_storage.dart';
 import 'features/home/home_screen.dart';
 
 void main() async {

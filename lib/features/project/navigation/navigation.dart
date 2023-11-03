@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
-import 'package:storied/config/project.dart';
+import 'package:storied/domain/project.dart';
 import 'package:storied/features/project/navigation/nav_menu.dart';
 import 'package:storied/features/project/navigation/nav_menu_options.dart';
 import 'package:storied/features/project/navigation/terms.dart';

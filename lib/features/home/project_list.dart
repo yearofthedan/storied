@@ -1,4 +1,4 @@
-import 'package:storied/config/project.dart';
+import 'package:storied/domain/project.dart';
 import 'package:storied/features/home/project_list_entry.dart';
 import 'package:flutter/material.dart';
 

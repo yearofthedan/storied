@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
-import 'package:storied/config/app_storage.dart';
+import 'package:storied/common/storage/app_storage.dart';
 import 'package:storied/projects.dart';
-import 'package:storied/common/storage/local_storage_client.dart';
+import 'package:storied/common/storage/clients/local_storage_client.dart';
 
 GetIt getIt = GetIt.instance;
 

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_test/flutter_test.dart';
+import 'package:storied/_test_helpers/find_extensions.dart';
+import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
-import 'package:storied/config/project.dart';
+import 'package:storied/domain/project.dart';
 import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/features/home/home_screen.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/features/home/terms.dart';
 import 'package:storied/features/project/routes.dart';
 import 'package:storied/projects.dart';
-
-import '../../_helpers/find_extensions.dart';
-import '../../_helpers/tester_extensions.dart';
 
 const root = 'root/com.app';
 
