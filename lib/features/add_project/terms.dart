@@ -1,2 +1,2 @@
 const saveNewProjectLabel = 'Create story';
-const projectNameField = 'Story name';
+const projectNameField = 'Project name';

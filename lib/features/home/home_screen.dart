@@ -4,7 +4,7 @@ import 'package:storied/features/home/project_list.dart';
 import 'package:flutter/material.dart';
 import 'package:storied/features/home/terms.dart';
 import 'package:storied/features/project/routes.dart';
-import 'package:storied/projects.dart';
+import 'package:storied/domain/projects.dart';
 import 'package:watch_it/watch_it.dart';
 
 class HomeScreen extends StatelessWidget with WatchItMixin {

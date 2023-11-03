@@ -6,7 +6,7 @@ import 'package:storied/common/styling/responsiveness.dart';
 import 'package:storied/common/styling/spacing.dart';
 import 'package:storied/domain/project.dart';
 import 'package:storied/features/add_project/terms.dart';
-import 'package:storied/projects.dart';
+import 'package:storied/domain/projects.dart';
 
 class AddProjectScreen extends StatelessWidget {
   final Function(Project) _onAdded;

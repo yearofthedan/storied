@@ -8,7 +8,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storied/features/home/terms.dart';
 import 'package:storied/features/project/navigation/terms.dart';
 import 'package:storied/main.dart';
-import 'package:storied/projects.dart';
+import 'package:storied/domain/projects.dart';
 
 const root = 'root/com.app';
 

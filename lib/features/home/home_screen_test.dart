@@ -9,7 +9,7 @@ import 'package:storied/features/home/home_screen.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/features/home/terms.dart';
 import 'package:storied/features/project/routes.dart';
-import 'package:storied/projects.dart';
+import 'package:storied/domain/projects.dart';
 
 const root = 'root/com.app';
 
@@ -55,7 +55,7 @@ void main() {
       var mockNavigator = await createWidgetUnderTest(tester, []);
 
       await tester.tapAndSettle(find.findByText(createProjectActionLabel));
-      await tester.enterText(find.findFieldByText('Story name'), 'testing');
+      await tester.enterText(find.findFieldByText(projectNameField), 'testing');
       await tester.tapAndSettle(find.findByText(saveNewProjectLabel));
       expectCurrRoute(mockNavigator, routeKey);
     });
