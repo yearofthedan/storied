@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:storied/_test_helpers/storage.dart';
 import 'package:storied/common/storage/clients/local_storage_client.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_test/flutter_test.dart';
-// ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 const root = 'root/com.app';
