@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/config/project.dart';
 import 'package:storied/features/project/navigation/nav_menu.dart';
-import 'package:storied/features/project/navigation/nav_options.dart';
+import 'package:storied/features/project/navigation/nav_menu_options.dart';
+import 'package:storied/features/project/navigation/terms.dart';
+
+_returnToHome(BuildContext context) {
+  getIt.popScope();
+  Navigator.popUntil(context, (route) => route.isFirst);
+}
 
 class Navigation extends StatelessWidget {
   final Project _project;
 
   const Navigation(this._project, {super.key});
 
-  _returnToHome(BuildContext context) {
-    getIt.popScope();
-    Navigator.popUntil(context, (route) => route.isFirst);
-  }
-
   @override
   Widget build(BuildContext context) {
-    var navOptions = NavOptions();
+    var navOptions = NavMenuOptions();
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
         appBar: AppBar(
@@ -27,14 +28,13 @@ class Navigation extends StatelessWidget {
             onPressed: () {
               _returnToHome(context);
             },
-            child: const Text('Exit'),
+            child: const Text(exitProjectActionLabel),
           ),
         ),
         body: Row(
           children: [
             SafeArea(
                 child: NavMenu(
-              header: CurrentProjectHeader(_project),
               navOptions: navOptions,
             )),
             Expanded(
@@ -51,16 +51,5 @@ class Navigation extends StatelessWidget {
         ),
       );
     });
-  }
-}
-
-class CurrentProjectHeader extends StatelessWidget {
-  final Project _project;
-
-  const CurrentProjectHeader(this._project, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(_project.name);
   }
 }

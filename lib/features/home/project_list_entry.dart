@@ -1,5 +1,6 @@
 import 'package:storied/config/project.dart';
 import 'package:flutter/material.dart';
+import 'package:storied/features/home/terms.dart';
 
 class ProjectListEntry extends StatelessWidget {
   final Project project;
@@ -26,11 +27,10 @@ class ProjectListEntry extends StatelessWidget {
             Expanded(
               child: ListTile(
                 title: Text(project.name),
-                subtitle: const Text('select to see more'),
+                subtitle: const Text(selectStoryActionLabel),
                 onTap: onNavigate,
               ),
             ),
-            TextButton(onPressed: onNavigate, child: const Text('view')),
           ]),
     );
   }

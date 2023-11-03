@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/config/project.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storied/features/project/navigation/terms.dart';
 import 'package:storied/features/project/project_screen.dart';
 import 'package:storied/projects.dart';
 
@@ -34,9 +35,9 @@ void main() {
       await createWidgetUnderTest(
           tester, Project.newWithName('sample project'));
       find.findByText('sample project');
-      find.findByText('Document');
-      find.findByText('Settings');
-      find.findByText('Exit');
+      find.findByText(navEntryLabelDocument);
+      find.findByText(navEntryLabelSettings);
+      find.findByText(exitProjectActionLabel);
     });
   });
 }

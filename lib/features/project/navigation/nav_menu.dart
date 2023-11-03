@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:storied/features/project/navigation/nav_options.dart';
+import 'package:storied/features/project/navigation/nav_menu_options.dart';
 
 class NavMenu extends StatelessWidget {
-  final Widget header;
-  final NavOptions navOptions;
+  final NavMenuOptions navOptions;
 
-  const NavMenu({super.key, required this.header, required this.navOptions});
+  const NavMenu({super.key, required this.navOptions});
 
   @override
   Widget build(BuildContext context) {

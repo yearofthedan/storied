@@ -1,30 +1,11 @@
 import 'package:storied/config/project.dart';
-import 'package:storied/features/home/add_project_screen.dart';
+import 'package:storied/features/add_project/routes.dart';
 import 'package:storied/features/home/project_list.dart';
 import 'package:flutter/material.dart';
-import 'package:storied/features/project/project_screen.dart';
+import 'package:storied/features/home/terms.dart';
+import 'package:storied/features/project/routes.dart';
 import 'package:storied/projects.dart';
 import 'package:watch_it/watch_it.dart';
-
-navToProject(BuildContext context, Project project) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      settings: const RouteSettings(name: 'open-project'),
-      builder: (_) => ProjectScreen(project),
-    ),
-  );
-}
-
-navToAddProject(BuildContext context, Function(Project) onAdded) {
-  Navigator.push(
-      context,
-      MaterialPageRoute(
-        settings: const RouteSettings(name: 'add-project'),
-        fullscreenDialog: true,
-        builder: (_) => AddProjectScreen(onAdded),
-      ));
-}
 
 class HomeScreen extends StatelessWidget with WatchItMixin {
   const HomeScreen({super.key});
@@ -32,7 +13,12 @@ class HomeScreen extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     var colors = Theme.of(context).colorScheme;
-    TextTheme text = Theme.of(context).textTheme;
+    var gradientTargetColor = Color.fromARGB(
+      colors.primary.alpha,
+      colors.primary.red,
+      colors.primary.green - 30,
+      colors.primary.blue,
+    );
     final List<Project> projectList =
         watchPropertyValue<Projects, List<Project>>((p) => p.projectList);
 
@@ -46,37 +32,46 @@ class HomeScreen extends StatelessWidget with WatchItMixin {
               end: Alignment.bottomRight,
               colors: [
             colors.primary,
-            Color.fromARGB(
-              colors.primary.alpha,
-              colors.primary.red,
-              colors.primary.green - 30,
-              colors.primary.blue,
-            )
+            gradientTargetColor,
           ])),
       child: Scaffold(
           floatingActionButton: FloatingActionButton.extended(
               onPressed: navigateToCreate,
               label: const Row(
-                children: [Icon(Icons.add), Text('New')],
+                children: [Icon(Icons.add), Text(createProjectActionLabel)],
               )),
           backgroundColor: Colors.transparent,
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                  width: double.infinity,
-                  child: Text(
-                    'Storied',
-                    style: text.headlineLarge?.apply(
-                        color: colors.onPrimary,
-                        decorationColor: colors.onPrimary,
-                        decoration: TextDecoration.underline),
-                    textAlign: TextAlign.center,
-                  )),
+              const AppTitle(),
               ProjectList(projectList, navigateToProject),
               // ,
             ],
           )),
     );
+  }
+}
+
+class AppTitle extends StatelessWidget {
+  const AppTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    TextTheme text = Theme.of(context).textTheme;
+    var colors = Theme.of(context).colorScheme;
+
+    return SizedBox(
+        width: double.infinity,
+        child: Text(
+          appTitleDisplayText,
+          style: text.headlineLarge?.apply(
+              color: colors.onPrimary,
+              decorationColor: colors.onPrimary,
+              decoration: TextDecoration.underline),
+          textAlign: TextAlign.center,
+        ));
   }
 }

@@ -2,10 +2,10 @@ import 'dart:math';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
-import 'package:storied/common/strings.dart';
-import 'package:storied/common/responsiveness.dart';
-import 'package:storied/common/spacing.dart';
+import 'package:storied/common/styling/responsiveness.dart';
+import 'package:storied/common/styling/spacing.dart';
 import 'package:storied/config/project.dart';
+import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/projects.dart';
 
 class AddProjectScreen extends StatelessWidget {
@@ -27,12 +27,7 @@ class AddProjectScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.cancel),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
+      appBar: AppBar(),
       body: SizedBox.expand(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -40,11 +35,11 @@ class AddProjectScreen extends StatelessWidget {
             children: [
               ResponsiveTextField(
                   onSubmit: onSubmit,
-                  label: 'Story name',
+                  label: projectNameField,
                   controller: controller),
               SizedBox(height: spacing['2']),
               ResponsiveFilledButton(
-                  label: getString('CREATE_STORY'),
+                  label: saveNewProjectLabel,
                   onSubmit: onSubmit,
                   controller: controller)
             ]),

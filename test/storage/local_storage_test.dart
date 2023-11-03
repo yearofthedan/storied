@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:storied/storage/local_storage_client.dart';
+import 'package:storied/common/storage/local_storage_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import '../_helpers/storage.dart';

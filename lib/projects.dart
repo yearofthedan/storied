@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/config/app_storage.dart';
 import 'package:storied/config/project.dart';
-import 'package:storied/storage/local_storage_client.dart';
+import 'package:storied/common/storage/local_storage_client.dart';
 
 class ProjectStorage {
   final AppConfig _appConfig;

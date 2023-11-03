@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/config/project.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storied/features/home/terms.dart';
+import 'package:storied/features/project/navigation/terms.dart';
 import 'package:storied/main.dart';
 import 'package:storied/projects.dart';
 
@@ -31,13 +33,13 @@ void main() {
     testWidgets('allows opening and closing a project',
         (WidgetTester tester) async {
       await createWidgetUnderTest(tester);
-      find.findByText('Storied');
+      find.findByText(appTitleDisplayText);
 
-      await tester.tapAndSettle(find.text('view'));
-      find.findByText('Storied', count: 0);
+      await tester.tapAndSettle(find.text('sample project'));
+      find.findByText(appTitleDisplayText, count: 0);
 
-      await tester.tapAndSettle(find.text('Exit'));
-      find.findByText('Storied');
+      await tester.tapAndSettle(find.text(exitProjectActionLabel));
+      find.findByText(appTitleDisplayText);
     });
   });
 }

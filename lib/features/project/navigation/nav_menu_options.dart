@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storied/features/project/document/document_page.dart';
+import 'package:storied/features/project/navigation/terms.dart';
+import 'package:storied/features/project/settings/settings_screen.dart';
 
 class NavEntry {
   dynamic component;
@@ -10,14 +12,15 @@ class NavEntry {
   NavEntry(this.component, this.label, this.icon, this.onSelect);
 }
 
-class NavOptions {
+class NavMenuOptions {
   late ValueNotifier<int> selected;
   late List<NavEntry> entries;
 
-  NavOptions() {
+  NavMenuOptions() {
     entries = List.of([
-      NavEntry(const DocumentPage(), 'Document', Icons.edit, select),
-      NavEntry(const DocumentPage(), 'Settings', Icons.settings, select),
+      NavEntry(const DocumentPage(), navEntryLabelDocument, Icons.edit, select),
+      NavEntry(const SettingsScreen(), navEntryLabelSettings, Icons.settings,
+          select),
     ]);
     selected = ValueNotifier(0);
   }

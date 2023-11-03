@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/common/get_it.dart';
-import 'package:storied/common/strings.dart';
 import 'package:storied/config/project.dart';
+import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/features/home/home_screen.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storied/features/home/terms.dart';
+import 'package:storied/features/project/routes.dart';
 import 'package:storied/projects.dart';
 
 import '../../_helpers/find_extensions.dart';
@@ -47,16 +49,16 @@ void main() {
 
       await tester.tapAndSettle(find.text('my story'));
 
-      expectCurrRoute(mockNavigator, 'open-project');
+      expectCurrRoute(mockNavigator, routeKey);
     });
 
     testWidgets('supports creating a project', (WidgetTester tester) async {
       var mockNavigator = await createWidgetUnderTest(tester, []);
 
-      await tester.tapAndSettle(find.findByText('New'));
+      await tester.tapAndSettle(find.findByText(createProjectActionLabel));
       await tester.enterText(find.findFieldByText('Story name'), 'testing');
-      await tester.tapAndSettle(find.findByText(getString('CREATE_STORY')));
-      expectCurrRoute(mockNavigator, 'open-project');
+      await tester.tapAndSettle(find.findByText(saveNewProjectLabel));
+      expectCurrRoute(mockNavigator, routeKey);
     });
   });
 }

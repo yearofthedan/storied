@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/config/project.dart';
+import 'package:storied/features/project/settings/terms.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -8,15 +9,17 @@ class SettingsScreen extends StatelessWidget {
   void alertDialog(BuildContext context) {
     var alert = AlertDialog(
       actions: [
-        OutlinedButton(onPressed: () {}, child: const Text('Delete')),
+        OutlinedButton(
+            onPressed: () {},
+            child: const Text(deleteProjectConfirmActionLabel)),
         FilledButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('Keep'))
+            child: const Text(deleteProjectCancelActionLabel))
       ],
-      title: const Text('Delete project?'),
-      content: const Text('This cannot be undone!'),
+      title: const Text(deleteProjectAlertTitle),
+      content: const Text(deleteProjectAlertHelper),
     );
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
@@ -29,12 +32,12 @@ class SettingsScreen extends StatelessWidget {
       child: ListView(
         children: [
           ListTile(
-            title: const Text('Title'),
+            title: const Text(settingLabelTitle),
             subtitle: Text(project.name),
           ),
           ListTile(
             onTap: () => alertDialog(context),
-            title: const Text('Delete'),
+            title: const Text(deleteProjectActionLabel),
             trailing: const Icon(Icons.delete),
           ),
         ],
