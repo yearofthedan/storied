@@ -59,6 +59,29 @@ void main() {
 
       await tester.tapAndSettle(confirm);
       verify(() => projectStorage.delete(any())).called(1);
+      expect(confirm, findsNothing);
+    });
+
+    testWidgets('supports cancelling a delete', (WidgetTester tester) async {
+      var projectStorage = await createWidgetUnderTest(tester);
+      when(() => projectStorage.delete(any()))
+          .thenAnswer((_) => Future.value());
+
+      find.findByText(settingLabelTitle);
+      var delete = find.findByText(deleteProjectActionLabel);
+
+      await tester.tapAndSettle(delete);
+      find.findByText(deleteProjectAlertTitle);
+
+      var cancel = find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.text(deleteProjectCancelActionLabel));
+
+      expect(cancel, findsOneWidget);
+
+      await tester.tapAndSettle(cancel);
+      verifyNever(() => projectStorage.delete(any()));
+      expect(cancel, findsNothing);
     });
   });
 }

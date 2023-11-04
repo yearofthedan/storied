@@ -18,7 +18,8 @@ class Project {
 
   Map<String, dynamic> toJson() => {'name': name, 'id': id};
 
-  delete() {
-    return getIt.get<ProjectStorage>().delete(this);
+  Future<bool> delete() async {
+    await getIt.get<ProjectStorage>().delete(this);
+    return true;
   }
 }

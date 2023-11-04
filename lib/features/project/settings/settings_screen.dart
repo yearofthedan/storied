@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
       actions: [
         OutlinedButton(
             onPressed: () {
-              project.delete();
+              project.delete().then((value) => Navigator.of(context).pop());
             },
             child: const Text(deleteProjectConfirmActionLabel)),
         FilledButton(

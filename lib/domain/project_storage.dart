@@ -4,23 +4,16 @@ import 'package:storied/common/storage/clients/local_storage_client.dart';
 import 'package:storied/domain/project.dart';
 
 class ProjectStorage {
-  final AppConfig _appConfig;
-  final StorageClient _storageClient;
-
-  ProjectStorage()
-      : _appConfig = getIt.get<AppConfig>(),
-        _storageClient = getIt.get<StorageClient>();
-
   Future<void> add(Project project) {
-    return _storageClient.createDir(project.id);
+    return getIt.get<StorageClient>().createDir(project.id);
   }
 
   Future<void> delete(Project project) {
-    return Future.value();
+    return getIt.get<StorageClient>().deleteDir(project.id);
   }
 
   Future<List<Project>> getAll() async {
-    return List<dynamic>.from(_appConfig.projects)
+    return List<dynamic>.from(getIt.get<AppConfig>().projects)
         .map((e) => Project.fromJson(e))
         .toList();
   }

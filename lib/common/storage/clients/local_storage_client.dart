@@ -8,6 +8,8 @@ abstract class StorageClient {
   Future<dynamic> createDir(String path);
   Future<dynamic> writeFile(String path, dynamic data);
   Future<List<String>> listFiles({String? path});
+
+  Future<void> deleteDir(String id);
 }
 
 class LocalStorageClient implements StorageClient {
@@ -54,5 +56,13 @@ class LocalStorageClient implements StorageClient {
   Future<File> writeFile(String path, dynamic data) async {
     var file = File('${await _storageDirPath}/$path');
     return file.writeAsString(data);
+  }
+
+  @override
+  Future<bool> deleteDir(String dirName) async {
+    Directory dirRef = Directory('${await _storageDirPath}/$dirName');
+
+    await dirRef.delete(recursive: true);
+    return true;
   }
 }
