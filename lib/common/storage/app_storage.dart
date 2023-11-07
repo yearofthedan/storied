@@ -39,6 +39,13 @@ class AppConfig {
     return manifestJson[key];
   }
 
+  Future<dynamic> setToManifest(String key, dynamic value) async {
+    dynamic manifestJson = await getProjectManifest();
+
+    manifestJson[key] = value;
+    overwriteProjectManifest(manifestJson);
+  }
+
   Future<String> getProjectRoot(projectId) async {
     return (await _storageClient.createDir(projectId)).path;
   }

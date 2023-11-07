@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/find_extensions.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
+import 'package:storied/domain/_mocks/project_storage.dart';
 import 'package:storied/domain/project.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/domain/project_storage.dart';
@@ -20,9 +21,8 @@ void main() {
       registerFallbackValue(Project.newWithName('some project'));
     });
 
-    createWidgetUnderTest(WidgetTester tester) async {
+    createWidgetUnderTest(WidgetTester tester, Project project) async {
       var projectStorage = MockProjectStorage();
-      var project = Project.newWithName('some project');
       getIt.registerSingleton<ProjectStorage>(projectStorage);
       getIt.registerSingleton<Project>(project);
 
@@ -34,48 +34,52 @@ void main() {
     }
 
     testWidgets('displays the project title', (WidgetTester tester) async {
-      await createWidgetUnderTest(tester);
+      var project = Project.newWithName('some project');
+      await createWidgetUnderTest(tester, project);
 
-      find.findByText(settingLabelTitle);
+      find.findByText(settingEntry_TitleLabel);
       find.findByText('some project');
     });
 
     testWidgets('supports deleting', (WidgetTester tester) async {
-      var projectStorage = await createWidgetUnderTest(tester);
-      when(() => projectStorage.delete(any()))
-          .thenAnswer((_) => Future.value());
+      var project = Project.newWithName('some project');
 
-      find.findByText(settingLabelTitle);
-      var delete = find.findByText(deleteProjectActionLabel);
+      var projectStorage = await createWidgetUnderTest(tester, project);
+      when(() => projectStorage.delete(any())).thenAnswer((_) {
+        return Future.value(true);
+      });
 
-      await tester.tapAndSettle(delete);
-      find.findByText(deleteProjectAlertTitle);
+      find.findByText(settingEntry_TitleLabel);
 
-      var confirm = find.descendant(
-          of: find.byType(AlertDialog),
-          matching: find.text(deleteProjectConfirmActionLabel));
+      await tester.tapAndSettle(find.findByText(deleteProjectAction_Label));
+      find.findByText(deleteProjectConfirmation_Title);
+
+      var confirm = find
+          .within(find.byType(AlertDialog))
+          .findByText(deleteProjectConfirmation_ConfirmLabel);
 
       expect(confirm, findsOneWidget);
 
       await tester.tapAndSettle(confirm);
+
+      find.findByText(deleteProjectAction_SuccessText);
       verify(() => projectStorage.delete(any())).called(1);
       expect(confirm, findsNothing);
     });
 
     testWidgets('supports cancelling a delete', (WidgetTester tester) async {
-      var projectStorage = await createWidgetUnderTest(tester);
-      when(() => projectStorage.delete(any()))
-          .thenAnswer((_) => Future.value());
+      var project = Project.newWithName('some project');
+      var projectStorage = await createWidgetUnderTest(tester, project);
 
-      find.findByText(settingLabelTitle);
-      var delete = find.findByText(deleteProjectActionLabel);
+      find.findByText(settingEntry_TitleLabel);
+      var delete = find.findByText(deleteProjectAction_Label);
 
       await tester.tapAndSettle(delete);
-      find.findByText(deleteProjectAlertTitle);
+      find.findByText(deleteProjectConfirmation_Title);
 
-      var cancel = find.descendant(
-          of: find.byType(AlertDialog),
-          matching: find.text(deleteProjectCancelActionLabel));
+      var cancel = find
+          .within(find.byType(AlertDialog))
+          .findByText(deleteProjectConfirmation_CancelLabel);
 
       expect(cancel, findsOneWidget);
 
@@ -85,5 +89,3 @@ void main() {
     });
   });
 }
-
-class MockProjectStorage extends Mock implements ProjectStorage {}

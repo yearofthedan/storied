@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/find_extensions.dart';
+import 'package:storied/_test_helpers/mocktail.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
+import 'package:storied/domain/_mocks/project_storage.dart';
 import 'package:storied/domain/project.dart';
 import 'package:storied/domain/project_storage.dart';
 import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/features/home/home_screen.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/features/home/terms.dart';
-import 'package:storied/features/project/routes.dart';
+import 'package:storied/features/project/navigation/terms.dart';
 import 'package:storied/domain/projects.dart';
 
 const root = 'root/com.app';
@@ -17,67 +19,47 @@ const root = 'root/com.app';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('home', () {
+  group(HomeScreen, () {
     setUp(() async {
       getIt.reset();
-      registerFallbackValue(MaterialPageRoute(
-        builder: (context) => Container(),
-      ));
+      registerFallbackValue(Project.newWithName('dummy'));
     });
 
     createWidgetUnderTest(
         WidgetTester tester, Iterable<Project> projects) async {
-      getIt.registerSingleton<ProjectStorage>(FakeProjectStorage());
+      var storage = MockProjectStorage();
+      when(() => storage.add(any())).thenAnswer(reflectFirstArgAsFuture);
+
+      getIt.registerSingleton<ProjectStorage>(storage);
       getIt.registerFactory<Projects>(() {
         return Projects(List.of(projects));
       });
 
-      var mockNavigator = TestObserver();
-      await tester.pumpWidget(MaterialApp(
-        navigatorObservers: [mockNavigator],
-        home: const HomeScreen(),
+      await tester.pumpWidget(const MaterialApp(
+        home: HomeScreen(),
       ));
       await tester.pumpAndSettle();
-      return mockNavigator;
     }
 
     testWidgets('allows navigating to an existing project',
         (WidgetTester tester) async {
-      var mockNavigator = await createWidgetUnderTest(
-          tester, [Project.newWithName('my story')]);
-      expect(find.text('my story'), findsOneWidget);
+      await createWidgetUnderTest(
+          tester, [Project.newWithName('some-project-title')]);
+      expect(find.text('some-project-title'), findsOneWidget);
 
-      await tester.tapAndSettle(find.text('my story'));
+      await tester.tapAndSettle(find.text('some-project-title'));
 
-      expectCurrRoute(mockNavigator, routeKey);
+      find.findByText(appTitle_Text, count: 0);
+      find.findByText(exitProjectActionLabel, count: 1);
     });
 
-    testWidgets('supports creating a project', (WidgetTester tester) async {
-      var mockNavigator = await createWidgetUnderTest(tester, []);
+    testWidgets('allows navigating to create a project',
+        (WidgetTester tester) async {
+      await createWidgetUnderTest(tester, []);
 
-      await tester.tapAndSettle(find.findByText(createProjectActionLabel));
-      await tester.enterText(
-          find.findWidgetByText(projectNameField), 'testing');
-      await tester.tapAndSettle(find.findByText(saveNewProjectLabel));
-      expectCurrRoute(mockNavigator, routeKey);
+      await tester.tapAndSettle(find.findByText(createProjectAction_Label));
+
+      find.findWidgetWithText(projectNameField_Label);
     });
   });
 }
-
-void expectCurrRoute(TestObserver mockNavigator, name) {
-  Route? route = verify(
-          () => mockNavigator.didPush(captureAny<MaterialPageRoute>(), any()))
-      .captured
-      .lastOrNull;
-
-  expect(route == null, false);
-}
-
-class FakeProjectStorage extends Mock implements ProjectStorage {
-  @override
-  Future<void> add(Project project) {
-    return Future.value();
-  }
-}
-
-class TestObserver extends Mock implements NavigatorObserver {}

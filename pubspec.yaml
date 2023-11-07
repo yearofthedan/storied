@@ -37,6 +37,7 @@ dependencies:
   flutter_test:
     sdk: flutter
   path_provider_platform_interface: ^2.1.0
+  logger: ^2.0.2+1
 
 dev_dependencies:
   plugin_platform_interface: ^2.0.0

@@ -4,28 +4,39 @@ import 'package:storied/domain/project.dart';
 import 'package:storied/domain/project_storage.dart';
 
 class Projects extends ChangeNotifier {
-  final List<Project> projectList;
+  late List<Project> projectList;
 
-  ValueNotifier<Project?> active = ValueNotifier(null);
+  Projects(List<Project> initialList) {
+    projectList = initialList;
+    initialList.forEach(_registerProjectListener);
+  }
 
-  Projects(List<Project> initialList) : projectList = initialList;
+  _onUpdate(Project project) {
+    if (project.deleted) {
+      var updatedList = List<Project>.from(projectList);
+      updatedList.removeWhere((element) => element.id == project.id);
+      projectList = updatedList;
+    }
+    notifyListeners();
+  }
 
   Future<Project> createProject(String projectName) async {
-    Project newProject = Project.newWithName(projectName);
-    await getIt<ProjectStorage>().add(newProject);
-
+    Project newProject =
+        await getIt<ProjectStorage>().add(Project.newWithName(projectName));
+    _registerProjectListener(newProject);
     projectList.add(newProject);
     notifyListeners();
     return newProject;
+  }
+
+  _registerProjectListener(Project project) {
+    project.addListener(() => _onUpdate(project));
+    return project;
   }
 
   static Future<Projects> fromStorage() async {
     List<Project> storedProjects = await getIt<ProjectStorage>().getAll();
     var projects = Projects(storedProjects);
     return projects;
-  }
-
-  void setActive(Project project) {
-    active.value = project;
   }
 }

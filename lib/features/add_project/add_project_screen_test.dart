@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/find_extensions.dart';
+import 'package:storied/_test_helpers/mocktail.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
+import 'package:storied/domain/_mocks/project_storage.dart';
 import 'package:storied/domain/project.dart';
 import 'package:storied/domain/project_storage.dart';
 import 'package:storied/features/add_project/add_project_screen.dart';
@@ -20,13 +22,14 @@ void main() {
 
     setUp(() async {
       getIt.reset();
-      registerFallbackValue(MaterialPageRoute(
-        builder: (context) => Container(),
-      ));
+      registerFallbackValue(Project.newWithName('dummy'));
     });
 
     createWidgetUnderTest(WidgetTester tester) async {
-      getIt.registerSingleton<ProjectStorage>(FakeProjectStorage());
+      var storage = MockProjectStorage();
+      when(() => storage.add(any())).thenAnswer(reflectFirstArgAsFuture);
+
+      getIt.registerSingleton<ProjectStorage>(storage);
       getIt.registerFactory<Projects>(() {
         return Projects([]);
       });
@@ -42,19 +45,13 @@ void main() {
     testWidgets('allows adding a project', (WidgetTester tester) async {
       await createWidgetUnderTest(tester);
 
-      var field = find.findWidgetByText(projectNameField);
+      var field = find.findWidgetWithText(projectNameField_Label);
       await tester.enterText(field, 'my project');
 
-      await tester.tapAndSettle(find.findByText(saveNewProjectLabel));
+      await tester
+          .tapAndSettle(find.findByText(submitCreateProjectAction_Label));
 
       expect(added?.name, 'my project');
     });
   });
-}
-
-class FakeProjectStorage extends Mock implements ProjectStorage {
-  @override
-  Future<void> add(Project project) {
-    return Future.value();
-  }
 }

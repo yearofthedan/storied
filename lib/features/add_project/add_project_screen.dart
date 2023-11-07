@@ -35,11 +35,11 @@ class AddProjectScreen extends StatelessWidget {
             children: [
               ResponsiveTextField(
                   onSubmit: onSubmit,
-                  label: projectNameField,
+                  label: projectNameField_Label,
                   controller: controller),
               SizedBox(height: spacing['2']),
               ResponsiveFilledButton(
-                  label: saveNewProjectLabel,
+                  label: submitCreateProjectAction_Label,
                   onSubmit: onSubmit,
                   controller: controller)
             ]),

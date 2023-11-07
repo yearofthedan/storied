@@ -1,12 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/project_storage.dart';
 import 'package:uuid/uuid.dart';
 
 var uuid = const Uuid();
 
-class Project {
+class Project extends ChangeNotifier {
   final String name;
   final String id;
+  String? path;
+  bool _deleted = false;
 
   Project(this.id, this.name);
 
@@ -18,8 +22,22 @@ class Project {
 
   Map<String, dynamic> toJson() => {'name': name, 'id': id};
 
-  Future<bool> delete() async {
-    await getIt.get<ProjectStorage>().delete(this);
-    return true;
+  set deleted(value) {
+    _deleted = value;
+    notifyListeners();
+  }
+
+  get deleted {
+    return _deleted;
+  }
+
+  Future<Project> delete() async {
+    try {
+      deleted = await getIt.get<ProjectStorage>().delete(this);
+      return this;
+    } catch (e) {
+      Logger().e('Unable to delete project', error: e);
+      return this;
+    }
   }
 }

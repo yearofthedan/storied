@@ -8,9 +8,21 @@ extension CommonFindersExtension on CommonFinders {
     return result;
   }
 
-  Finder findWidgetByText(text, {type = TextField}) {
+  Finder findWidgetWithText(text, {type = TextField}) {
     var result = widgetWithText(type, text);
     expect(result, findsOneWidget);
     return result;
+  }
+
+  ScopedFinder within(Finder finder) => ScopedFinder(finder);
+}
+
+class ScopedFinder {
+  final Finder parentScope;
+
+  const ScopedFinder(this.parentScope);
+
+  findByText(String text) {
+    return find.descendant(of: parentScope, matching: find.text(text));
   }
 }

@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget with WatchItMixin {
           floatingActionButton: FloatingActionButton.extended(
               onPressed: navigateToCreate,
               label: const Row(
-                children: [Icon(Icons.add), Text(createProjectActionLabel)],
+                children: [Icon(Icons.add), Text(createProjectAction_Label)],
               )),
           backgroundColor: Colors.transparent,
           body: Column(
@@ -66,7 +66,7 @@ class AppTitle extends StatelessWidget {
     return SizedBox(
         width: double.infinity,
         child: Text(
-          appTitleDisplayText,
+          appTitle_Text,
           style: text.headlineLarge?.apply(
               color: colors.onPrimary,
               decorationColor: colors.onPrimary,

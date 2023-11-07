@@ -82,6 +82,18 @@ void main() {
           expect(result, true);
         }, createDirectory: (path) => dir);
       });
+
+      test('it returns true if the directory is missing', () async {
+        var dir = MockDirectory();
+        when(() => dir.exists()).thenAnswer((_) => Future.value(false));
+        IOOverrides.runZoned(() async {
+          final storage = LocalStorageClient();
+          var result = await storage.deleteDir('new dir');
+
+          expect(result, true);
+          verifyNever(() => dir.delete(recursive: true));
+        }, createDirectory: (path) => dir);
+      });
     });
 
     group('listFiles', () {

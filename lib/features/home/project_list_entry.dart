@@ -27,7 +27,7 @@ class ProjectListEntry extends StatelessWidget {
             Expanded(
               child: ListTile(
                 title: Text(project.name),
-                subtitle: const Text(selectStoryActionLabel),
+                subtitle: const Text(selectProjectAction_Label),
                 onTap: onNavigate,
               ),
             ),

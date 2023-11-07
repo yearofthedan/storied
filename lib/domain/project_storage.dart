@@ -4,15 +4,30 @@ import 'package:storied/common/storage/clients/local_storage_client.dart';
 import 'package:storied/domain/project.dart';
 
 class ProjectStorage {
-  Future<void> add(Project project) {
-    return getIt.get<StorageClient>().createDir(project.id);
+  Future<Project> add(Project project) async {
+    String result = await getIt.get<StorageClient>().createDir(project.id);
+    project.path = result;
+
+    List<Project> storedProjects = await getAll();
+    storedProjects.add(project);
+    await getIt.get<AppConfig>().setToManifest('projects', storedProjects);
+
+    return project;
   }
 
-  Future<void> delete(Project project) {
-    return getIt.get<StorageClient>().deleteDir(project.id);
+  Future<bool> delete(Project project) async {
+    await getIt.get<StorageClient>().deleteDir(project.id);
+
+    List<Project> storedProjects = await getAll();
+    storedProjects.removeWhere((entry) => entry.id == project.id);
+    await getIt.get<AppConfig>().setToManifest('projects', storedProjects);
+
+    project.deleted = true;
+    return true;
   }
 
   Future<List<Project>> getAll() async {
+    // todo set the path
     return List<dynamic>.from(getIt.get<AppConfig>().projects)
         .map((e) => Project.fromJson(e))
         .toList();

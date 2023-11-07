@@ -11,17 +11,26 @@ class SettingsScreen extends StatelessWidget {
       actions: [
         OutlinedButton(
             onPressed: () {
-              project.delete().then((value) => Navigator.of(context).pop());
+              project.delete().then((value) {
+                if (value.deleted) {
+                  Navigator.of(context).popUntil((r) => r.isFirst);
+                  SnackBarBuilder.success(
+                      context, deleteProjectAction_SuccessText);
+                } else {
+                  SnackBarBuilder.error(
+                      context, deleteProjectAction_FailureText);
+                }
+              });
             },
-            child: const Text(deleteProjectConfirmActionLabel)),
+            child: const Text(deleteProjectConfirmation_ConfirmLabel)),
         FilledButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text(deleteProjectCancelActionLabel))
+            child: const Text(deleteProjectConfirmation_CancelLabel))
       ],
-      title: const Text(deleteProjectAlertTitle),
-      content: const Text(deleteProjectAlertHelper),
+      title: const Text(deleteProjectConfirmation_Title),
+      content: const Text(deleteProjectConfirmation_InfoText),
     );
     showDialog(context: context, builder: (BuildContext context) => alert);
   }
@@ -34,16 +43,38 @@ class SettingsScreen extends StatelessWidget {
       child: ListView(
         children: [
           ListTile(
-            title: const Text(settingLabelTitle),
+            title: const Text(settingEntry_TitleLabel),
             subtitle: Text(project.name),
           ),
           ListTile(
+            title: const Text(settingEntry_PathLabel),
+            subtitle: Text(project.path ?? 'Unknown path'),
+          ),
+          ListTile(
             onTap: () => alertDialog(context, project),
-            title: const Text(deleteProjectActionLabel),
+            title: const Text(deleteProjectAction_Label),
             trailing: const Icon(Icons.delete),
           ),
         ],
       ),
+    ));
+  }
+}
+
+class SnackBarBuilder {
+  static error(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      showCloseIcon: true,
+      backgroundColor: Colors.red,
+    ));
+  }
+
+  static success(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      showCloseIcon: true,
+      backgroundColor: Colors.green,
     ));
   }
 }
