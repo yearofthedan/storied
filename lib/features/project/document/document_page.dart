@@ -1,5 +1,5 @@
 import 'package:storied/common/get_it.dart';
-import 'package:storied/common/storage/app_storage.dart';
+import 'package:storied/common/storage/app_config_storage.dart';
 import 'package:storied/domain/project.dart';
 import 'package:storied/features/project/document/document_persistence.dart';
 import 'package:storied/common/storage/clients/local_storage_client.dart';
@@ -28,7 +28,7 @@ class _DocumentPageState extends State<DocumentPage> {
   }
 
   Future<void> _loadFromAssets(String projectId) async {
-    AppConfig appStorage = AppConfig(LocalStorageClient());
+    AppConfigStorage appStorage = AppConfigStorage(LocalStorageClient());
     documentPersistence = DocumentPersistence(appStorage, projectId);
     Document doc = await docOrNew(documentPersistence!);
     setState(() {

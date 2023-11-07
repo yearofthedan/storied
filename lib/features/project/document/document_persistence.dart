@@ -1,9 +1,9 @@
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:storied/common/storage/app_storage.dart';
+import 'package:storied/common/storage/app_config_storage.dart';
 
 class DocumentPersistence {
   String projectId;
-  AppConfig appStorage;
+  AppConfigStorage appStorage;
 
   DocumentPersistence(this.appStorage, this.projectId);
 

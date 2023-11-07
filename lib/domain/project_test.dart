@@ -2,7 +2,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/common/storage/_mocks/app_config.dart';
 import 'package:storied/common/storage/_mocks/storage_client.dart';
-import 'package:storied/common/storage/app_storage.dart';
+import 'package:storied/common/storage/app_config_storage.dart';
 import 'package:storied/common/storage/clients/local_storage_client.dart';
 import 'package:storied/domain/project.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -31,7 +31,7 @@ void main() {
         var mockAppConfig = MockAppConfig();
 
         getIt.registerSingleton<ProjectStorage>(ProjectStorage());
-        getIt.registerSingleton<AppConfig>(mockAppConfig);
+        getIt.registerSingleton<AppConfigStorage>(mockAppConfig);
         getIt.registerSingleton<StorageClient>(mockStorageClient);
         var project = Project.newWithName('some name');
 
