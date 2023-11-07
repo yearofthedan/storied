@@ -65,7 +65,7 @@ void main() {
           final storage = LocalStorageClient();
 
           var result = await storage.createDir('new dir');
-          expect(result, dir);
+          expect(result, dir.path);
         }, createDirectory: (path) => dir);
       });
     });
@@ -73,6 +73,7 @@ void main() {
     group('deleteDir', () {
       test('allows deleting a folder', () async {
         var dir = MockDirectory();
+        when(() => dir.exists()).thenAnswer((invocation) => Future.value(true));
         when(() => dir.delete(recursive: true))
             .thenAnswer((invocation) => Future.value(dir));
         IOOverrides.runZoned(() async {
