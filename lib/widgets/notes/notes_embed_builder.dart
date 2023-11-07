@@ -11,8 +11,8 @@ class NotesEmbedBuilder extends EmbedBuilder {
   String get key => 'notes';
 
   @override
-  Widget build(
-      BuildContext context, QuillController controller, Embed node, bool readOnly, bool inline, TextStyle textStyle) {
+  Widget build(BuildContext context, QuillController controller, Embed node,
+      bool readOnly, bool inline, TextStyle textStyle) {
     final notes = NotesBlockEmbed(node.value.data).document;
 
     return Row(

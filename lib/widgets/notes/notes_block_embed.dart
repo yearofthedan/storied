@@ -7,7 +7,8 @@ class NotesBlockEmbed extends CustomBlockEmbed {
 
   static const String noteType = 'notes';
 
-  static NotesBlockEmbed fromDocument(Document document) => NotesBlockEmbed(jsonEncode(document.toDelta().toJson()));
+  static NotesBlockEmbed fromDocument(Document document) =>
+      NotesBlockEmbed(jsonEncode(document.toDelta().toJson()));
 
   Document get document => Document.fromJson(jsonDecode(data));
 }
