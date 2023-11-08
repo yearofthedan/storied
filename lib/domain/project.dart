@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:storied/common/exceptions.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/project_storage.dart';
 import 'package:uuid/uuid.dart';
@@ -35,8 +35,9 @@ class Project extends ChangeNotifier {
     try {
       deleted = await getIt.get<ProjectStorage>().delete(this);
       return this;
-    } catch (e) {
-      Logger().e('Unable to delete project', error: e);
+    } catch (e, s) {
+      captureException(
+          exception: e, stack: s, message: 'Unable to delete project');
       return this;
     }
   }

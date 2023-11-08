@@ -45,6 +45,7 @@ Format all the things: `dart format --fix .`
 
 Lint like nobody's watching: `dart fix --apply`
 
-
+#### Bulding the app
+The app expects the variable SENTRY_DSN to be defined
 
 
