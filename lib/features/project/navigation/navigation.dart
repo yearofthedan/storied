@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
+import 'package:storied/common/device/responsiveness.dart';
 import 'package:storied/domain/project.dart';
+import 'package:storied/features/project/navigation/bottom_nav_bar.dart';
 import 'package:storied/features/project/navigation/nav_menu.dart';
 import 'package:storied/features/project/navigation/nav_menu_options.dart';
 import 'package:storied/features/project/navigation/terms.dart';
@@ -31,12 +33,19 @@ class Navigation extends StatelessWidget {
             child: const Text(exitProjectActionLabel),
           ),
         ),
+        bottomNavigationBar: context.responsive(
+          BottomNavBar(navOptions: navOptions),
+          sm: null,
+        ),
         body: Row(
           children: [
-            SafeArea(
-                child: NavMenu(
-              navOptions: navOptions,
-            )),
+            context.responsive(
+              Container(),
+              sm: SafeArea(
+                  child: NavMenu(
+                navOptions: navOptions,
+              )),
+            ),
             Expanded(
                 child: Container(
               color: Theme.of(context).colorScheme.primaryContainer,

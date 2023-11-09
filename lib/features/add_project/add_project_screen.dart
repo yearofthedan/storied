@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
-import 'package:storied/common/styling/responsiveness.dart';
+import 'package:storied/common/device/responsiveness.dart';
 import 'package:storied/common/styling/spacing.dart';
 import 'package:storied/domain/project.dart';
 import 'package:storied/features/add_project/terms.dart';
