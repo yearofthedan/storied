@@ -24,7 +24,7 @@ class Projects extends ChangeNotifier {
     Project newProject =
         await getIt<ProjectStorage>().add(Project.newWithName(projectName));
     _registerProjectListener(newProject);
-    projectList.add(newProject);
+    projectList = List<Project>.from([...projectList, newProject]);
     notifyListeners();
     return newProject;
   }
