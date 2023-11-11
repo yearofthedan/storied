@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/project.dart';
+import 'package:storied/widgets/snack_bar.dart';
 import 'package:storied/features/project/settings/terms.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -57,24 +58,6 @@ class SettingsScreen extends StatelessWidget {
           ),
         ],
       ),
-    ));
-  }
-}
-
-class SnackBarBuilder {
-  static error(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      showCloseIcon: true,
-      backgroundColor: Colors.red,
-    ));
-  }
-
-  static success(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      showCloseIcon: true,
-      backgroundColor: Colors.green,
     ));
   }
 }

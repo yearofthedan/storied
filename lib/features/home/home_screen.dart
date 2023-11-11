@@ -6,19 +6,15 @@ import 'package:storied/features/home/terms.dart';
 import 'package:storied/features/project/routes.dart';
 import 'package:storied/domain/projects.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:flutter_color/flutter_color.dart';
 
 class HomeScreen extends StatelessWidget with WatchItMixin {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var colors = Theme.of(context).colorScheme;
-    var gradientTargetColor = Color.fromARGB(
-      colors.primary.alpha,
-      colors.primary.red,
-      colors.primary.green - 30,
-      colors.primary.blue,
-    );
+    ColorScheme colors = Theme.of(context).colorScheme;
+    var gradientTargetColor = colors.primary.darker(5);
     final List<Project> projectList =
         watchPropertyValue<Projects, List<Project>>((p) => p.projectList);
 
