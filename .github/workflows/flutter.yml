@@ -1,8 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Flutter
 
 on:
@@ -12,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,12 +19,33 @@ jobs:
       - run: flutter --version
       - name: Install dependencies
         run: flutter pub get
-      # Uncomment this step to verify the use of 'dart format' on each commit.
-      # - name: Verify formatting
-      #   run: dart format --output=none --set-exit-if-changed .
-
-      # Consider passing '--fatal-infos' for slightly stricter analysis.
       - name: Analyze project source
         run: flutter analyze
       - name: Run tests
         run: flutter test lib/**/*_test.dart
+
+  build_android:
+    needs: verify
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.13.7'
+          channel: 'stable'
+      - name: Build APK
+        run: flutter build apk --release --dart-define=SENTRY_DSN=${{ secrets.SENTRY_DSN }}
+
+  build_macos:
+    needs: verify
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.13.7'
+          channel: 'stable'
+      - name: Build MacOS
+        run: flutter build macos --release --dart-define=SENTRY_DSN=${{ secrets.SENTRY_DSN }}
