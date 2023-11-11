@@ -1,4 +1,5 @@
 // ignore_for_file: constant_identifier_names
+const settingsScreen_Title = 'Settings';
 
 const deleteProjectAction_Label = 'Delete';
 const deleteProjectConfirmation_CancelLabel = 'Keep';

@@ -7,11 +7,11 @@ import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/_mocks/project_storage.dart';
 import 'package:storied/domain/project.dart';
 import 'package:storied/domain/project_storage.dart';
-import 'package:storied/features/add_project/terms.dart';
+import 'package:storied/features/add_project/add_project_screen.dart';
 import 'package:storied/features/home/home_screen.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/features/home/terms.dart';
-import 'package:storied/features/project/navigation/terms.dart';
+import 'package:storied/features/project/project_screen.dart';
 import 'package:storied/domain/projects.dart';
 
 const root = 'root/com.app';
@@ -50,7 +50,7 @@ void main() {
       await tester.tapAndSettle(find.text('some-project-title'));
 
       find.findByText(appTitle_Text, count: 0);
-      find.findByText(exitProjectActionLabel, count: 1);
+      find.findByType(ProjectScreen, count: 1);
     });
 
     testWidgets('allows navigating to create a project',
@@ -59,7 +59,7 @@ void main() {
 
       await tester.tapAndSettle(find.findByText(createProjectAction_Label));
 
-      find.findWidgetWithText(projectNameField_Label);
+      find.findByType(AddProjectScreen, count: 1);
     });
   });
 }

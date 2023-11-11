@@ -8,6 +8,12 @@ extension CommonFindersExtension on CommonFinders {
     return result;
   }
 
+  Finder findByType(Type type, {count = 1}) {
+    var result = byType(type);
+    expect(result, findsNWidgets(count));
+    return result;
+  }
+
   Finder findWidgetWithText(text, {type = TextField}) {
     var result = widgetWithText(type, text);
     expect(result, findsOneWidget);

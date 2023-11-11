@@ -10,7 +10,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storied/domain/project_storage.dart';
 import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/features/home/terms.dart';
-import 'package:storied/features/project/navigation/terms.dart';
+import 'package:storied/features/project/project_screen.dart';
+import 'package:storied/features/project/terms.dart';
 import 'package:storied/features/project/settings/terms.dart';
 import 'package:storied/main.dart';
 import 'package:storied/domain/projects.dart';
@@ -51,7 +52,7 @@ void main() {
       await tester.tapAndSettle(find.text('some-existing-project'));
       find.findByText(appTitle_Text, count: 0);
 
-      await tester.tapAndSettle(find.text(exitProjectActionLabel));
+      await tester.tapAndSettle(find.byTooltip(backAction_toolTip));
       find.findByText(appTitle_Text);
     });
 
@@ -65,13 +66,10 @@ void main() {
           .tapAndSettle(find.findByText(submitCreateProjectAction_Label));
 
       find.findByText(appTitle_Text, count: 0);
-      find.findByText('some-new-project');
-      find.findByText(navEntryLabelDocument);
+      find.findByType(ProjectScreen);
 
-      await tester.tapAndSettle(find.text(exitProjectActionLabel));
-
-      // TODO debug why this is not finding an entry even though it works in the app
-      // find.findByText('some-new-project', count: 1);
+      await tester.tapAndSettle(find.byTooltip(backAction_toolTip));
+      find.findByText('some-new-project', count: 1);
     });
 
     testWidgets('allows removing a project', (WidgetTester tester) async {
@@ -81,7 +79,7 @@ void main() {
       await tester.tapAndSettle(find.findByText('some-existing-project'));
       find.findByText(appTitle_Text, count: 0);
 
-      await tester.tapAndSettle(find.findByText(navEntryLabelSettings));
+      await tester.tapAndSettle(find.byTooltip(viewSettingsAction_tooltip));
       await tester.tapAndSettle(find.text(deleteProjectAction_Label));
       await tester.tapAndSettle(find
           .within(find.byType(AlertDialog))

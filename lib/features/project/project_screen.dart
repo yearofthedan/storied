@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/project.dart';
-import 'package:storied/features/project/navigation/navigation.dart';
+import 'package:storied/features/project/document/document_page.dart';
+import 'package:storied/features/project/settings/routes.dart';
+import 'package:storied/features/project/terms.dart';
 
-class ProjectScreen extends StatelessWidget {
+class ProjectScreen extends StatelessWidget with RouteAware {
   final Project _project;
 
   ProjectScreen(this._project, {super.key}) {
@@ -15,7 +17,41 @@ class ProjectScreen extends StatelessWidget {
   }
 
   @override
+  didPopNext() {
+    super.didPopNext();
+    getIt.popScope();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Navigation(_project);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_project.name),
+        leading: const BackButton(),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: viewSettingsAction_tooltip,
+              onPressed: () => navToSettings(context)),
+        ],
+      ),
+      body: const Row(
+        children: [ProjectPageContent()],
+      ),
+    );
+  }
+}
+
+class ProjectPageContent extends StatelessWidget {
+  const ProjectPageContent({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Container(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            child: const DocumentPage()));
   }
 }

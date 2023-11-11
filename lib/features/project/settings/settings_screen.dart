@@ -40,24 +40,27 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Project project = getIt<Project>();
     return Scaffold(
+        appBar: AppBar(
+          title: const Text(settingsScreen_Title),
+        ),
         body: Center(
-      child: ListView(
-        children: [
-          ListTile(
-            title: const Text(settingEntry_TitleLabel),
-            subtitle: Text(project.name),
+          child: ListView(
+            children: [
+              ListTile(
+                title: const Text(settingEntry_TitleLabel),
+                subtitle: Text(project.name),
+              ),
+              ListTile(
+                title: const Text(settingEntry_PathLabel),
+                subtitle: Text(project.path ?? 'Unknown path'),
+              ),
+              ListTile(
+                onTap: () => alertDialog(context, project),
+                title: const Text(deleteProjectAction_Label),
+                trailing: const Icon(Icons.delete),
+              ),
+            ],
           ),
-          ListTile(
-            title: const Text(settingEntry_PathLabel),
-            subtitle: Text(project.path ?? 'Unknown path'),
-          ),
-          ListTile(
-            onTap: () => alertDialog(context, project),
-            title: const Text(deleteProjectAction_Label),
-            trailing: const Icon(Icons.delete),
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 }
