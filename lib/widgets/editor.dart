@@ -3,18 +3,15 @@ import 'package:storied/widgets/notes/notes_block_embed.dart';
 import 'package:storied/widgets/notes/notes_embed_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/extensions.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill/flutter_quill.dart';
 
 class EditorToolbar extends StatelessWidget {
-  final double toolbarIconSize = 16;
-
-  final QuillController _controller;
+  final double toolbarIconSize = 16.0;
 
   final Function() onAddEditNote;
   final Function() onSaveDocument;
 
-  const EditorToolbar(
-    this._controller, {
+  const EditorToolbar({
     super.key,
     required this.onAddEditNote,
     required this.onSaveDocument,
@@ -22,154 +19,192 @@ class EditorToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return QuillToolbar(
-      toolbarIconAlignment: WrapAlignment.start,
-      children: [
-        HistoryButton(
-          icon: Icons.undo_outlined,
-          iconSize: toolbarIconSize,
-          tooltip: 'undo',
-          controller: _controller,
-          undo: true,
-        ),
-        HistoryButton(
-          icon: Icons.redo_outlined,
-          iconSize: toolbarIconSize,
-          tooltip: 'redo',
-          controller: _controller,
-          undo: false,
-        ),
-        ToggleStyleButton(
-          attribute: Attribute.bold,
-          icon: Icons.format_bold,
-          iconSize: toolbarIconSize,
-          tooltip: 'bold',
-          controller: _controller,
-        ),
-        ToggleStyleButton(
-          attribute: Attribute.italic,
-          icon: Icons.format_italic,
-          iconSize: toolbarIconSize,
-          tooltip: 'italic',
-          controller: _controller,
-        ),
-        ToggleStyleButton(
-          attribute: Attribute.underline,
-          icon: Icons.format_underline,
-          iconSize: toolbarIconSize,
-          tooltip: 'underline',
-          controller: _controller,
-        ),
-        ToggleStyleButton(
-          attribute: Attribute.strikeThrough,
-          icon: Icons.format_strikethrough,
-          iconSize: toolbarIconSize,
-          tooltip: 'strikethrough',
-          controller: _controller,
-        ),
-        ColorButton(
-          icon: Icons.color_lens,
-          iconSize: toolbarIconSize,
-          tooltip: 'text color',
-          controller: _controller,
-          background: false,
-        ),
-        ColorButton(
-          icon: Icons.format_color_fill,
-          iconSize: toolbarIconSize,
-          tooltip: 'background color',
-          controller: _controller,
-          background: true,
-        ),
-        ClearFormatButton(
-          icon: Icons.format_clear,
-          iconSize: toolbarIconSize,
-          tooltip: 'clear formatting',
-          controller: _controller,
-        ),
-        SelectAlignmentButton(
-          controller: _controller,
-          tooltips: const {
-            ToolbarButtons.leftAlignment: 'left',
-            ToolbarButtons.centerAlignment: 'centre',
-            ToolbarButtons.rightAlignment: 'right',
-            ToolbarButtons.justifyAlignment: 'justify',
-          },
-          iconSize: toolbarIconSize,
-          showLeftAlignment: true,
-          showCenterAlignment: true,
-          showRightAlignment: true,
-          showJustifyAlignment: true,
-        ),
-        SelectHeaderStyleButton(
-          tooltip: 'text style',
-          controller: _controller,
-          iconSize: toolbarIconSize,
-        ),
-        ToggleStyleButton(
-          attribute: Attribute.ol,
-          tooltip: 'ordered list',
-          controller: _controller,
-          icon: Icons.format_list_numbered,
-          iconSize: toolbarIconSize,
-        ),
-        ToggleStyleButton(
-          attribute: Attribute.ul,
-          tooltip: 'bulleted list',
-          controller: _controller,
-          icon: Icons.format_list_bulleted,
-          iconSize: toolbarIconSize,
-        ),
-        ToggleStyleButton(
-          attribute: Attribute.blockQuote,
-          tooltip: 'block quote',
-          controller: _controller,
-          icon: Icons.format_quote,
-          iconSize: toolbarIconSize,
-        ),
-        IndentButton(
-          icon: Icons.format_indent_increase,
-          iconSize: toolbarIconSize,
-          tooltip: 'indent',
-          controller: _controller,
-          isIncrease: true,
-        ),
-        IndentButton(
-          icon: Icons.format_indent_decrease,
-          iconSize: toolbarIconSize,
-          tooltip: 'outdent',
-          controller: _controller,
-          isIncrease: false,
-        ),
-        SearchButton(
-          icon: Icons.search,
-          iconSize: toolbarIconSize,
-          tooltip: 'search',
-          controller: _controller,
-        ),
-        CustomButton(
-          onPressed: onAddEditNote,
-          icon: Icons.ac_unit,
-          tooltip: 'add note',
-          iconSize: toolbarIconSize,
-        ),
-        CustomButton(
-          onPressed: onSaveDocument,
-          tooltip: 'save',
-          icon: Icons.save,
-          iconSize: toolbarIconSize,
-        ),
-      ],
-    );
+    return QuillToolbarProvider(
+        toolbarConfigurations: const QuillToolbarConfigurations(),
+        child: QuillBaseToolbar(
+            configurations: QuillBaseToolbarConfigurations(
+                toolbarIconAlignment: WrapAlignment.start,
+                multiRowsDisplay: false,
+                childrenBuilder: (context) {
+                  final controller = context.requireQuillController;
+                  return [
+                    QuillToolbarHistoryButton(
+                      controller: controller,
+                      options: QuillToolbarHistoryButtonOptions(
+                        iconData: Icons.undo_outlined,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'undo',
+                        isUndo: true,
+                      ),
+                    ),
+                    QuillToolbarHistoryButton(
+                      controller: controller,
+                      options: QuillToolbarHistoryButtonOptions(
+                        iconData: Icons.redo_outlined,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'redo',
+                        isUndo: false,
+                      ),
+                    ),
+                    QuillToolbarToggleStyleButton(
+                      controller: controller,
+                      attribute: Attribute.bold,
+                      options: QuillToolbarToggleStyleButtonOptions(
+                        iconData: Icons.format_bold,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'bold',
+                      ),
+                    ),
+                    QuillToolbarToggleStyleButton(
+                      controller: controller,
+                      attribute: Attribute.italic,
+                      options: QuillToolbarToggleStyleButtonOptions(
+                        iconData: Icons.format_italic,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'italic',
+                      ),
+                    ),
+                    QuillToolbarToggleStyleButton(
+                      controller: controller,
+                      attribute: Attribute.underline,
+                      options: QuillToolbarToggleStyleButtonOptions(
+                        iconData: Icons.format_underline,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'underline',
+                      ),
+                    ),
+                    QuillToolbarToggleStyleButton(
+                      controller: controller,
+                      attribute: Attribute.strikeThrough,
+                      options: QuillToolbarToggleStyleButtonOptions(
+                        iconData: Icons.format_strikethrough,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'strikethrough',
+                      ),
+                    ),
+                    QuillToolbarClearFormatButton(
+                        controller: controller,
+                        options: QuillToolbarClearFormatButtonOptions(
+                          iconData: Icons.format_clear,
+                          iconSize: toolbarIconSize,
+                          tooltip: 'clear formatting',
+                        )),
+                    QuillToolbarColorButton(
+                      controller: controller,
+                      isBackground: false,
+                      options: QuillToolbarColorButtonOptions(
+                        iconData: Icons.color_lens,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'text color',
+                      ),
+                    ),
+                    QuillToolbarColorButton(
+                      controller: controller,
+                      isBackground: true,
+                      options: QuillToolbarColorButtonOptions(
+                        iconData: Icons.format_color_fill,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'background color',
+                      ),
+                    ),
+                    QuillToolbarSelectAlignmentButton(
+                        controller: controller,
+                        showLeftAlignment: true,
+                        showRightAlignment: true,
+                        showCenterAlignment: true,
+                        showJustifyAlignment: true,
+                        options: QuillToolbarSelectAlignmentButtonOptions(
+                          iconSize: toolbarIconSize,
+                          tooltips: const QuillSelectAlignmentValues(
+                              leftAlignment: 'left',
+                              centerAlignment: 'centre',
+                              rightAlignment: 'right',
+                              justifyAlignment: 'justify'),
+                        )),
+                    QuillToolbarSelectHeaderStyleButtons(
+                        controller: controller,
+                        options: QuillToolbarSelectHeaderStyleButtonsOptions(
+                          tooltip: 'text style',
+                          iconSize: toolbarIconSize,
+                        )),
+                    QuillToolbarToggleStyleButton(
+                      controller: controller,
+                      attribute: Attribute.ol,
+                      options: QuillToolbarToggleStyleButtonOptions(
+                        iconSize: toolbarIconSize,
+                        tooltip: 'ordered list',
+                        iconData: Icons.format_list_numbered,
+                      ),
+                    ),
+                    QuillToolbarToggleStyleButton(
+                      controller: controller,
+                      attribute: Attribute.ul,
+                      options: QuillToolbarToggleStyleButtonOptions(
+                        iconSize: toolbarIconSize,
+                        tooltip: 'bulleted list',
+                        iconData: Icons.format_list_bulleted,
+                      ),
+                    ),
+                    QuillToolbarToggleStyleButton(
+                      controller: controller,
+                      attribute: Attribute.blockQuote,
+                      options: QuillToolbarToggleStyleButtonOptions(
+                        iconSize: toolbarIconSize,
+                        tooltip: 'block quote',
+                        iconData: Icons.format_quote,
+                      ),
+                    ),
+                    QuillToolbarIndentButton(
+                        controller: controller,
+                        isIncrease: true,
+                        options: const QuillToolbarIndentButtonOptions(
+                          iconData: Icons.format_indent_increase,
+                          tooltip: 'indent',
+                          iconSize: 16.0,
+                        )),
+                    QuillToolbarIndentButton(
+                      controller: controller,
+                      isIncrease: false,
+                      options: const QuillToolbarIndentButtonOptions(
+                        iconData: Icons.format_indent_decrease,
+                        iconSize: 16.0,
+                        tooltip: 'outdent',
+                      ),
+                    ),
+                    QuillToolbarSearchButton(
+                      controller: controller,
+                      options: QuillToolbarSearchButtonOptions(
+                        iconData: Icons.search,
+                        iconSize: toolbarIconSize,
+                        tooltip: 'search',
+                      ),
+                    ),
+                    QuillToolbarCustomButton(
+                        options: QuillToolbarCustomButtonOptions(
+                          onPressed: onAddEditNote,
+                          icon: const Icon(Icons.ac_unit),
+                          tooltip: 'add note',
+                          iconSize: toolbarIconSize,
+                        ),
+                        controller: controller),
+                    QuillToolbarCustomButton(
+                        options: QuillToolbarCustomButtonOptions(
+                          onPressed: onSaveDocument,
+                          tooltip: 'save',
+                          icon: const Icon(Icons.save),
+                          iconSize: toolbarIconSize,
+                        ),
+                        controller: controller),
+                  ];
+                })));
   }
 }
 
 class EditorWidget extends StatelessWidget {
-  final QuillController _controller;
   final FocusNode _focusNode = FocusNode();
   final Function _onSave;
 
-  EditorWidget(this._controller, this._onSave, {super.key});
+  EditorWidget(this._onSave, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +219,6 @@ class EditorWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(top: 8, bottom: 8),
             child: EditorToolbar(
-              _controller,
               onAddEditNote: () => _addEditNote(context),
               onSaveDocument: () => _onSave(context),
             ),
@@ -204,23 +238,24 @@ class EditorWidget extends StatelessWidget {
 
   Widget _editorPanel(BuildContext context) {
     Widget quillEditor = QuillEditor(
-      controller: _controller,
-      embedBuilders: [NotesEmbedBuilder(addEditNote: _addEditNote)],
-      scrollController: ScrollController(),
-      scrollable: true,
-      focusNode: _focusNode,
-      autoFocus: false,
-      readOnly: false,
-      placeholder: 'Add content',
-      enableSelectionToolbar: isMobile(),
-      expands: true,
-      padding: const EdgeInsets.all(16.0),
-      maxContentWidth: 600,
-    );
+        focusNode: _focusNode,
+        scrollController: ScrollController(),
+        configurations: QuillEditorConfigurations(
+          embedBuilders: [NotesEmbedBuilder(addEditNote: _addEditNote)],
+          scrollable: true,
+          autoFocus: false,
+          readOnly: false,
+          placeholder: 'Add content',
+          enableSelectionToolbar: isMobile(supportWeb: false),
+          expands: true,
+          padding: const EdgeInsets.all(16.0),
+          maxContentWidth: 600,
+        ));
     return quillEditor;
   }
 
   Future<void> _addEditNote(BuildContext context, {Document? document}) async {
+    final controller = context.quilController!;
     final isEditing = document != null;
     final quillEditorController = QuillController(
       document: document ?? Document(),
@@ -230,22 +265,22 @@ class EditorWidget extends StatelessWidget {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        titlePadding: const EdgeInsets.only(left: 16, top: 8),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('${isEditing ? 'Edit' : 'Add'} note'),
-            IconButton(
-              onPressed: () => Navigator.of(context).pop(),
-              icon: const Icon(Icons.close),
-            )
-          ],
-        ),
-        content: QuillEditor.basic(
-          controller: quillEditorController,
-          readOnly: false,
-        ),
-      ),
+          titlePadding: const EdgeInsets.only(left: 16, top: 8),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('${isEditing ? 'Edit' : 'Add'} note'),
+              IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(Icons.close),
+              )
+            ],
+          ),
+          content: QuillProvider(
+              configurations: QuillConfigurations(
+                controller: quillEditorController,
+              ),
+              child: QuillEditor.basic())),
     );
 
     if (quillEditorController.document.isEmpty()) return;
@@ -253,7 +288,6 @@ class EditorWidget extends StatelessWidget {
     final block = BlockEmbed.custom(
       NotesBlockEmbed.fromDocument(quillEditorController.document),
     );
-    final controller = _controller;
     final index = controller.selection.baseOffset;
     final length = controller.selection.extentOffset - index;
 

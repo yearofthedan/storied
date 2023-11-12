@@ -238,6 +238,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_animate:
+    dependency: transitive
+    description:
+      name: flutter_animate
+      sha256: "62f346340a96192070e31e3f2a1bd30a28530f1fe8be978821e06cd56b74d6d2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.0+1"
   flutter_color:
     dependency: "direct main"
     description:
@@ -314,10 +322,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_quill
-      sha256: a06604f1fc9b7a023090d8fd86043a63599ab12c4207323869793d2db9ce3df6
+      sha256: "49070012fad3f6794ca4c1fe76d16f0610ff1be6edee360ab935f95de898dbd1"
       url: "https://pub.dev"
     source: hosted
-    version: "7.4.9"
+    version: "8.4.3"
   flutter_test:
     dependency: "direct main"
     description: flutter
@@ -624,14 +632,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      sha256: "67fc27ed9639506c856c840ccce7594d0bdcd91bc8d53d6e52359449a1d50602"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.11.1"
   pigeon:
     dependency: transitive
     description:
@@ -918,5 +918,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.1.0 <4.0.0"
+  dart: ">=3.1.5 <4.0.0"
   flutter: ">=3.13.0"

@@ -5,7 +5,7 @@ import 'package:storied/features/project/document/document_persistence.dart';
 import 'package:storied/common/storage/clients/local_storage_client.dart';
 import 'package:storied/widgets/editor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill/flutter_quill.dart';
 
 class DocumentPage extends StatefulWidget {
   const DocumentPage({super.key});
@@ -47,9 +47,13 @@ class _DocumentPageState extends State<DocumentPage> {
 
     if (_controller == null) {
       return Container();
-    } else {
-      return EditorWidget(_controller!,
-          () => documentPersistence!.saveDocument(_controller!.document));
     }
+
+    return QuillProvider(
+        configurations: QuillConfigurations(
+          controller: _controller!,
+        ),
+        child: EditorWidget(
+            () => documentPersistence!.saveDocument(_controller!.document)));
   }
 }

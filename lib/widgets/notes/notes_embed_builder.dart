@@ -1,6 +1,6 @@
 import 'package:storied/widgets/notes/notes_block_embed.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
+import 'package:flutter_quill/flutter_quill.dart';
 
 class NotesEmbedBuilder extends EmbedBuilder {
   NotesEmbedBuilder({required this.addEditNote});
