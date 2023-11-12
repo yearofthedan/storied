@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/find_extensions.dart';
-import 'package:storied/_test_helpers/mocktail.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/_mocks/project_storage.dart';
@@ -30,11 +29,6 @@ void main() {
     createWidgetUnderTest(
         WidgetTester tester, Iterable<Project> projects) async {
       var storage = MockProjectStorage();
-      when(() => storage.add(any())).thenAnswer(reflectFirstArgAsFuture);
-      when(() => storage.delete(any())).thenAnswer((_) {
-        return Future.value(true);
-      });
-
       getIt.registerSingleton<ProjectStorage>(storage);
       getIt.registerFactory<Projects>(() {
         return Projects(List.of(projects));
@@ -42,6 +36,7 @@ void main() {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
       find.findByText(appTitle_Text, count: 1);
+      return storage;
     }
 
     testWidgets('allows opening and closing a project',
@@ -57,7 +52,9 @@ void main() {
     });
 
     testWidgets('allows creating a project', (WidgetTester tester) async {
-      await createWidgetUnderTest(tester, []);
+      var storage = await createWidgetUnderTest(tester, []);
+      when(() => storage.add(any()))
+          .thenAnswer((_) => Future.value(Project.newWithName('my project')));
 
       await tester.tapAndSettle(find.findByText(createProjectAction_Label));
       await tester.enterText(
@@ -73,9 +70,11 @@ void main() {
     });
 
     testWidgets('allows removing a project', (WidgetTester tester) async {
-      await createWidgetUnderTest(
+      var storage = await createWidgetUnderTest(
           tester, [Project.newWithName('some-existing-project')]);
-
+      when(() => storage.delete(any())).thenAnswer((_) {
+        return Future.value(true);
+      });
       await tester.tapAndSettle(find.findByText('some-existing-project'));
       find.findByText(appTitle_Text, count: 0);
 

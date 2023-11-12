@@ -21,8 +21,7 @@ class Projects extends ChangeNotifier {
   }
 
   Future<Project> createProject(String projectName) async {
-    Project newProject =
-        await getIt<ProjectStorage>().add(Project.newWithName(projectName));
+    Project newProject = await getIt<ProjectStorage>().add(projectName);
     _registerProjectListener(newProject);
     projectList = List<Project>.from([...projectList, newProject]);
     notifyListeners();

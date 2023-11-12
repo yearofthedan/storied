@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/find_extensions.dart';
-import 'package:storied/_test_helpers/mocktail.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
 import 'package:storied/domain/_mocks/project_storage.dart';
@@ -26,10 +25,6 @@ void main() {
     });
 
     createWidgetUnderTest(WidgetTester tester) async {
-      var storage = MockProjectStorage();
-      when(() => storage.add(any())).thenAnswer(reflectFirstArgAsFuture);
-
-      getIt.registerSingleton<ProjectStorage>(storage);
       getIt.registerFactory<Projects>(() {
         return Projects([]);
       });
@@ -43,6 +38,12 @@ void main() {
     }
 
     testWidgets('allows adding a project', (WidgetTester tester) async {
+      var storage = MockProjectStorage();
+      when(() => storage.add('my project'))
+          .thenAnswer((_) => Future.value(Project.newWithName('my project')));
+
+      getIt.registerSingleton<ProjectStorage>(storage);
+
       await createWidgetUnderTest(tester);
 
       var field = find.findWidgetWithText(projectNameField_Label);

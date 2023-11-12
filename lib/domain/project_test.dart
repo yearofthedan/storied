@@ -3,7 +3,7 @@ import 'package:storied/common/get_it.dart';
 import 'package:storied/common/storage/_mocks/app_config.dart';
 import 'package:storied/common/storage/_mocks/storage_client.dart';
 import 'package:storied/common/storage/app_config_storage.dart';
-import 'package:storied/common/storage/clients/local_storage_client.dart';
+import 'package:storied/common/storage/clients/abstract_storage_client.dart';
 import 'package:storied/domain/project.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/domain/project_storage.dart';
@@ -32,7 +32,7 @@ void main() {
 
         getIt.registerSingleton<ProjectStorage>(ProjectStorage());
         getIt.registerSingleton<AppConfigStorage>(mockAppConfig);
-        getIt.registerSingleton<StorageClient>(mockStorageClient);
+        getIt.registerSingleton<AbstractStorageClient>(mockStorageClient);
         var project = Project.newWithName('some name');
 
         when(() => mockStorageClient.deleteDir(project.id))

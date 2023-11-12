@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:storied/common/storage/clients/local_storage_client.dart';
+import 'package:storied/common/storage/clients/abstract_storage_client.dart';
 
 class AppConfigStorage {
-  final StorageClient _storageClient;
+  final AbstractStorageClient _storageClient;
 
-  List<dynamic> projects = List.of([]);
+  List<dynamic> projectsJson = List.of([]);
 
   dynamic _manifestCache;
 
@@ -12,7 +12,7 @@ class AppConfigStorage {
 
   Future<AppConfigStorage> warm() async {
     _manifestCache = await getProjectManifest(force: true);
-    projects = await getFromManifest('projects');
+    projectsJson = await getFromManifest('projects');
     return this;
   }
 

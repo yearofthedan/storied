@@ -2,17 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:storied/common/storage/clients/abstract_storage_client.dart';
+import 'package:storied/domain/storage_ref.dart';
 
-abstract class StorageClient {
-  Future<dynamic> getFileData(String path, {Function(String)? decoder});
-  Future<dynamic> createDir(String path);
-  Future<dynamic> writeFile(String path, dynamic data);
-  Future<List<String>> listFiles({String? path});
-
-  Future<bool> deleteDir(String id);
-}
-
-class LocalStorageClient implements StorageClient {
+class LocalStorageClient implements AbstractStorageClient {
   Future<Directory> get _storageDir async {
     final Directory directory = await getApplicationDocumentsDirectory();
     debugPrint('Getting files from ${directory.path}');
@@ -46,11 +39,11 @@ class LocalStorageClient implements StorageClient {
   }
 
   @override
-  Future<String> createDir(String dirName) async {
+  createDir(String dirName) async {
     Directory newDir = Directory('${await _storageDirPath}/$dirName');
 
     await newDir.create();
-    return newDir.path;
+    return StorageRef(path: newDir.path, type: StorageType.local);
   }
 
   @override

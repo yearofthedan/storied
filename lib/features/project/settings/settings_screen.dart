@@ -52,7 +52,7 @@ class SettingsScreen extends StatelessWidget {
               ),
               ListTile(
                 title: const Text(settingEntry_PathLabel),
-                subtitle: Text(project.path ?? 'Unknown path'),
+                subtitle: Text(project.storage?.path ?? 'Unknown path'),
               ),
               ListTile(
                 onTap: () => alertDialog(context, project),
