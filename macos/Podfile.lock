@@ -62,7 +62,7 @@ SPEC CHECKSUMS:
   pasteboard: 9b69dba6fedbb04866be632205d532fe2f6b1d99
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   Sentry: e0ea366f95ebb68f26d6030d8c22d6b2e6d23dd0
-  sentry_flutter: 9a04c51c373d76ee22167bf1e65bc468c0a91fed
+  sentry_flutter: 7166140366ce26f6cb9e7b0705580a751598a7b4
   SentryPrivate: 949a21fa59872427edc73b524c3ec8456761d97f
   url_launcher_macos: d2691c7dd33ed713bf3544850a623080ec693d95
 
