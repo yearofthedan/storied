@@ -20,7 +20,7 @@ Future<void> main() async {
     captureException(
         exception: details.exception,
         stack: details.stack,
-        message: 'Unable to delete project');
+        message: 'Unhandled app error');
     if (kReleaseMode) {
       exit(1);
     }

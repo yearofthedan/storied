@@ -37,6 +37,8 @@ class ProjectStorage {
   Future<List<Project>> getAll() async {
     return List<dynamic>.from(getIt.get<AppConfigStorage>().projectsJson)
         .map((e) => Project.fromJson(e))
+        // todo fix the missing storage refs
+
         .toList();
   }
 }

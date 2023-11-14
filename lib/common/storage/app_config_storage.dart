@@ -27,10 +27,10 @@ class AppConfigStorage {
 
   Future<dynamic> getProjectManifest({force = false}) async {
     if (_manifestCache == null || force) {
-      var result = await _storageClient.getFileData('projects.json',
-          decoder: jsonDecode);
+      var result = await _storageClient.getFileData('projects.json');
+
       if (result != null) {
-        return result;
+        return jsonDecode(result);
       }
       var emptyManifestData = {'projects': []};
       await _storageClient.writeFile(
@@ -56,11 +56,6 @@ class AppConfigStorage {
 
   Future<String> getProjectRoot(projectId) async {
     return (await _storageClient.createDir(projectId)).path;
-  }
-
-  Future<dynamic> getFromProjectRoot(projectId, String fileName) async {
-    return _storageClient.getFileData('$projectId/$fileName',
-        decoder: jsonDecode);
   }
 
   Future<dynamic> writeToProjectRoot(

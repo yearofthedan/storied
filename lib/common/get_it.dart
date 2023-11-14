@@ -8,9 +8,10 @@ import 'package:storied/common/storage/clients/local_storage_client.dart';
 GetIt getIt = GetIt.instance;
 
 initGetIt() async {
+  getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
   getIt.registerSingleton<AbstractStorageClient>(LocalStorageClient());
   getIt.registerSingletonAsync<AppConfigStorage>(
-      () => AppConfigStorage(getIt<AbstractStorageClient>()).warm());
+      () => AppConfigStorage(getIt<LocalStorageClient>()).warm());
 
   getIt.registerSingletonWithDependencies<ProjectStorage>(
       () => ProjectStorage(),

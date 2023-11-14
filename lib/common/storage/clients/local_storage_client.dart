@@ -28,14 +28,13 @@ class LocalStorageClient implements AbstractStorageClient {
   }
 
   @override
-  Future<dynamic> getFileData(String path, {Function(String)? decoder}) async {
+  Future<String?> getFileData(String path) async {
     var file = File('${await _storageDirPath}/$path');
     if (!file.existsSync()) {
       return null;
     }
 
-    dynamic data = await file.readAsString();
-    return decoder == null ? data : decoder(data);
+    return await file.readAsString();
   }
 
   @override

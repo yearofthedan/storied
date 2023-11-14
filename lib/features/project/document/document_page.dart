@@ -1,14 +1,14 @@
 import 'package:storied/common/get_it.dart';
-import 'package:storied/common/storage/app_config_storage.dart';
 import 'package:storied/domain/project.dart';
-import 'package:storied/features/project/document/document_persistence.dart';
-import 'package:storied/common/storage/clients/local_storage_client.dart';
+import 'package:storied/features/project/document/content.dart';
 import 'package:storied/widgets/editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class DocumentPage extends StatefulWidget {
-  const DocumentPage({super.key});
+  final Content<dynamic> _content;
+
+  const DocumentPage(this._content, {super.key});
 
   @override
   State<DocumentPage> createState() => _DocumentPageState();
@@ -16,21 +16,17 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> {
   QuillController? _controller;
-  DocumentPersistence? documentPersistence;
 
-  docOrNew(DocumentPersistence persistence) async {
+  docOrNew() async {
     try {
-      final doc = await persistence.getProjectDocument();
-      return doc;
+      return Document.fromJson(await widget._content.load());
     } catch (error) {
       return Document()..insert(0, 'Empty asset');
     }
   }
 
   Future<void> _loadFromAssets(String projectId) async {
-    AppConfigStorage appStorage = AppConfigStorage(LocalStorageClient());
-    documentPersistence = DocumentPersistence(appStorage, projectId);
-    Document doc = await docOrNew(documentPersistence!);
+    Document doc = await docOrNew();
     setState(() {
       _controller = QuillController(
           document: doc, selection: const TextSelection.collapsed(offset: 0));
@@ -43,9 +39,6 @@ class _DocumentPageState extends State<DocumentPage> {
 
     if (_controller == null) {
       _loadFromAssets(project.id);
-    }
-
-    if (_controller == null) {
       return Container();
     }
 
@@ -53,7 +46,7 @@ class _DocumentPageState extends State<DocumentPage> {
         configurations: QuillConfigurations(
           controller: _controller!,
         ),
-        child: EditorWidget(
-            () => documentPersistence!.saveDocument(_controller!.document)));
+        child: EditorWidget((Document document) =>
+            widget._content.save(document.toDelta().toJson())));
   }
 }

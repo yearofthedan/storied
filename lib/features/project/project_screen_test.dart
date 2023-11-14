@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/common/get_it.dart';
+import 'package:storied/common/storage/clients/local_storage_client.dart';
 import 'package:storied/domain/project.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/features/project/document/document_page.dart';
@@ -22,6 +23,8 @@ void main() {
     });
 
     createWidgetUnderTest(WidgetTester tester, Project project) async {
+      getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
+
       await tester.pumpWidget(MaterialApp(
         home: ProjectScreen(project),
       ));

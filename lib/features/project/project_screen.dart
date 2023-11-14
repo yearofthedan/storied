@@ -35,23 +35,14 @@ class ProjectScreen extends StatelessWidget with RouteAware {
               onPressed: () => navToSettings(context)),
         ],
       ),
-      body: const Row(
-        children: [ProjectPageContent()],
+      body: Row(
+        children: [
+          Expanded(
+              child: Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: DocumentPage(_project.document))),
+        ],
       ),
     );
-  }
-}
-
-class ProjectPageContent extends StatelessWidget {
-  const ProjectPageContent({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Container(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: const DocumentPage()));
   }
 }

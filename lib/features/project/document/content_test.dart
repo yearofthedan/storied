@@ -11,12 +11,11 @@ void main() {
   group('Content', () {
     late Content content;
     late MockStorageClient mockStorageClient;
-    reflector(dynamic value) => value;
 
     setUp(() {
       mockStorageClient = MockStorageClient();
-      content =
-          Content(mockStorageClient, 'path/to/file', reflector, reflector);
+      content = Content<String>(mockStorageClient, 'path/to/file',
+          decoder: (value) => value, encoder: (value) => value);
     });
 
     group('load', () {

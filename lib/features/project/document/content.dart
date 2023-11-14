@@ -3,8 +3,8 @@ import 'package:storied/common/storage/clients/abstract_storage_client.dart';
 class Content<T> {
   final AbstractStorageClient storageClient;
   final String path;
-  final Function(dynamic) decoder;
-  final Function(dynamic) encoder;
+  final T Function(String) decoder;
+  final String Function(T) encoder;
 
   T? _data;
 
@@ -12,21 +12,23 @@ class Content<T> {
     return _data;
   }
 
-  Content(this.storageClient, this.path, this.decoder, this.encoder);
+  Content(this.storageClient, this.path,
+      {required this.decoder, required this.encoder});
 
-  save(dynamic content) async {
+  save(T content) async {
     await storageClient.writeFile(path, encoder(content));
     _data = content;
     return true;
   }
 
-  Future<T> load() {
-    return storageClient
-        .getFileData(path)
-        .then((saved) => decoder(saved))
-        .then((decoded) {
-      _data = decoded;
-      return data!;
-    });
+  Future<T?> load() async {
+    var rawData = await storageClient.getFileData(path);
+
+    if (rawData == null) {
+      return null;
+    }
+
+    _data = decoder(rawData);
+    return _data;
   }
 }
