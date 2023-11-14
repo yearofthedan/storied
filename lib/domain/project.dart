@@ -39,7 +39,7 @@ class Project extends ChangeNotifier {
   Project.fromJson(e)
       : id = e['id'],
         name = e['name'],
-        storage = StorageRef.fromJson(e['storage'] ?? {});
+        storage = StorageRef.fromJson(e['storage']);
 
   Map<String, dynamic> toJson() => {'name': name, 'id': id};
 
