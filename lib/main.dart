@@ -17,7 +17,7 @@ Future<void> main() async {
 
   FlutterError.onError = (details) async {
     FlutterError.presentError(details);
-    captureException(
+    getIt<Observability>().captureException(
         exception: details.exception,
         stack: details.stack,
         message: 'Unhandled app error');

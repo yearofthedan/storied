@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/extensions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-class EditorToolbar extends StatelessWidget {
-  final double toolbarIconSize = 16.0;
+const toolbarIconSize = 16.0;
 
+class EditorToolbar extends StatelessWidget {
   final Function() onAddEditNote;
   final Function() onSaveDocument;
 
@@ -30,7 +30,7 @@ class EditorToolbar extends StatelessWidget {
                   return [
                     QuillToolbarHistoryButton(
                       controller: controller,
-                      options: QuillToolbarHistoryButtonOptions(
+                      options: const QuillToolbarHistoryButtonOptions(
                         iconData: Icons.undo_outlined,
                         iconSize: toolbarIconSize,
                         tooltip: 'undo',
@@ -39,7 +39,7 @@ class EditorToolbar extends StatelessWidget {
                     ),
                     QuillToolbarHistoryButton(
                       controller: controller,
-                      options: QuillToolbarHistoryButtonOptions(
+                      options: const QuillToolbarHistoryButtonOptions(
                         iconData: Icons.redo_outlined,
                         iconSize: toolbarIconSize,
                         tooltip: 'redo',
@@ -49,7 +49,7 @@ class EditorToolbar extends StatelessWidget {
                     QuillToolbarToggleStyleButton(
                       controller: controller,
                       attribute: Attribute.bold,
-                      options: QuillToolbarToggleStyleButtonOptions(
+                      options: const QuillToolbarToggleStyleButtonOptions(
                         iconData: Icons.format_bold,
                         iconSize: toolbarIconSize,
                         tooltip: 'bold',
@@ -58,7 +58,7 @@ class EditorToolbar extends StatelessWidget {
                     QuillToolbarToggleStyleButton(
                       controller: controller,
                       attribute: Attribute.italic,
-                      options: QuillToolbarToggleStyleButtonOptions(
+                      options: const QuillToolbarToggleStyleButtonOptions(
                         iconData: Icons.format_italic,
                         iconSize: toolbarIconSize,
                         tooltip: 'italic',
@@ -67,7 +67,7 @@ class EditorToolbar extends StatelessWidget {
                     QuillToolbarToggleStyleButton(
                       controller: controller,
                       attribute: Attribute.underline,
-                      options: QuillToolbarToggleStyleButtonOptions(
+                      options: const QuillToolbarToggleStyleButtonOptions(
                         iconData: Icons.format_underline,
                         iconSize: toolbarIconSize,
                         tooltip: 'underline',
@@ -76,7 +76,7 @@ class EditorToolbar extends StatelessWidget {
                     QuillToolbarToggleStyleButton(
                       controller: controller,
                       attribute: Attribute.strikeThrough,
-                      options: QuillToolbarToggleStyleButtonOptions(
+                      options: const QuillToolbarToggleStyleButtonOptions(
                         iconData: Icons.format_strikethrough,
                         iconSize: toolbarIconSize,
                         tooltip: 'strikethrough',
@@ -84,7 +84,7 @@ class EditorToolbar extends StatelessWidget {
                     ),
                     QuillToolbarClearFormatButton(
                         controller: controller,
-                        options: QuillToolbarClearFormatButtonOptions(
+                        options: const QuillToolbarClearFormatButtonOptions(
                           iconData: Icons.format_clear,
                           iconSize: toolbarIconSize,
                           tooltip: 'clear formatting',
@@ -92,7 +92,7 @@ class EditorToolbar extends StatelessWidget {
                     QuillToolbarColorButton(
                       controller: controller,
                       isBackground: false,
-                      options: QuillToolbarColorButtonOptions(
+                      options: const QuillToolbarColorButtonOptions(
                         iconData: Icons.color_lens,
                         iconSize: toolbarIconSize,
                         tooltip: 'text color',
@@ -101,7 +101,7 @@ class EditorToolbar extends StatelessWidget {
                     QuillToolbarColorButton(
                       controller: controller,
                       isBackground: true,
-                      options: QuillToolbarColorButtonOptions(
+                      options: const QuillToolbarColorButtonOptions(
                         iconData: Icons.format_color_fill,
                         iconSize: toolbarIconSize,
                         tooltip: 'background color',
@@ -113,9 +113,9 @@ class EditorToolbar extends StatelessWidget {
                         showRightAlignment: true,
                         showCenterAlignment: true,
                         showJustifyAlignment: true,
-                        options: QuillToolbarSelectAlignmentButtonOptions(
+                        options: const QuillToolbarSelectAlignmentButtonOptions(
                           iconSize: toolbarIconSize,
-                          tooltips: const QuillSelectAlignmentValues(
+                          tooltips: QuillSelectAlignmentValues(
                               leftAlignment: 'left',
                               centerAlignment: 'centre',
                               rightAlignment: 'right',
@@ -123,14 +123,15 @@ class EditorToolbar extends StatelessWidget {
                         )),
                     QuillToolbarSelectHeaderStyleButtons(
                         controller: controller,
-                        options: QuillToolbarSelectHeaderStyleButtonsOptions(
+                        options:
+                            const QuillToolbarSelectHeaderStyleButtonsOptions(
                           tooltip: 'text style',
                           iconSize: toolbarIconSize,
                         )),
                     QuillToolbarToggleStyleButton(
                       controller: controller,
                       attribute: Attribute.ol,
-                      options: QuillToolbarToggleStyleButtonOptions(
+                      options: const QuillToolbarToggleStyleButtonOptions(
                         iconSize: toolbarIconSize,
                         tooltip: 'ordered list',
                         iconData: Icons.format_list_numbered,
@@ -139,7 +140,7 @@ class EditorToolbar extends StatelessWidget {
                     QuillToolbarToggleStyleButton(
                       controller: controller,
                       attribute: Attribute.ul,
-                      options: QuillToolbarToggleStyleButtonOptions(
+                      options: const QuillToolbarToggleStyleButtonOptions(
                         iconSize: toolbarIconSize,
                         tooltip: 'bulleted list',
                         iconData: Icons.format_list_bulleted,
@@ -148,7 +149,7 @@ class EditorToolbar extends StatelessWidget {
                     QuillToolbarToggleStyleButton(
                       controller: controller,
                       attribute: Attribute.blockQuote,
-                      options: QuillToolbarToggleStyleButtonOptions(
+                      options: const QuillToolbarToggleStyleButtonOptions(
                         iconSize: toolbarIconSize,
                         tooltip: 'block quote',
                         iconData: Icons.format_quote,
@@ -160,20 +161,20 @@ class EditorToolbar extends StatelessWidget {
                         options: const QuillToolbarIndentButtonOptions(
                           iconData: Icons.format_indent_increase,
                           tooltip: 'indent',
-                          iconSize: 16.0,
+                          iconSize: toolbarIconSize,
                         )),
                     QuillToolbarIndentButton(
                       controller: controller,
                       isIncrease: false,
                       options: const QuillToolbarIndentButtonOptions(
                         iconData: Icons.format_indent_decrease,
-                        iconSize: 16.0,
+                        iconSize: toolbarIconSize,
                         tooltip: 'outdent',
                       ),
                     ),
                     QuillToolbarSearchButton(
                       controller: controller,
-                      options: QuillToolbarSearchButtonOptions(
+                      options: const QuillToolbarSearchButtonOptions(
                         iconData: Icons.search,
                         iconSize: toolbarIconSize,
                         tooltip: 'search',

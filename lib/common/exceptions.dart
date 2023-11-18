@@ -13,3 +13,17 @@ captureException(
     Logger().e(message, error: exception, stackTrace: stack);
   }
 }
+
+class Observability {
+  captureException(
+      {dynamic exception, dynamic stack, message = 'Unexpected exception'}) {
+    if (kReleaseMode) {
+      Sentry.captureException(
+        exception,
+        stackTrace: stack,
+      );
+    } else {
+      Logger().e(message, error: exception, stackTrace: stack);
+    }
+  }
+}
