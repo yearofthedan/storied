@@ -1,0 +1,12 @@
+{
+    "common": {
+        "createAction": "Create"
+    },
+    "addProject": {
+        "projectNameFieldLabel": "Project name",
+        "storageField": {
+            "gDriveOptionLabel": "Google drive",
+            "localOptionLabel": "Local drive"
+        }
+    }
+}

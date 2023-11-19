@@ -8,8 +8,8 @@ import 'package:storied/domain/project.dart';
 import 'package:storied/domain/project_storage.dart';
 import 'package:storied/features/add_project/add_project_screen.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/domain/projects.dart';
+import 'package:storied/i18n/strings.g.dart';
 
 const root = 'root/com.app';
 
@@ -37,7 +37,7 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('allows adding a project', (WidgetTester tester) async {
+    testWidgets('allows adding a local project', (WidgetTester tester) async {
       var storage = MockProjectStorage();
       when(() => storage.add('my project'))
           .thenAnswer((_) => Future.value(Project.newWithName('my project')));
@@ -46,11 +46,12 @@ void main() {
 
       await createWidgetUnderTest(tester);
 
-      var field = find.findWidgetWithText(projectNameField_Label);
+      var field = find.findWidgetWithText(t.addProject.projectNameFieldLabel);
       await tester.enterText(field, 'my project');
 
-      await tester
-          .tapAndSettle(find.findByText(submitCreateProjectAction_Label));
+      await tester.tapAndSettle(find.findByText(t.common.createAction));
+
+      // await tester.tapAndSettle(find.findByText(submitAddProjectAction_Label));
 
       expect(added?.name, 'my project');
     });

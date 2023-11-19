@@ -5,8 +5,8 @@ import 'package:storied/common/get_it.dart';
 import 'package:storied/common/device/responsiveness.dart';
 import 'package:storied/common/styling/spacing.dart';
 import 'package:storied/domain/project.dart';
-import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/domain/projects.dart';
+import 'package:storied/i18n/strings.g.dart';
 
 class AddProjectScreen extends StatelessWidget {
   final Function(Project) _onAdded;
@@ -35,11 +35,11 @@ class AddProjectScreen extends StatelessWidget {
             children: [
               ResponsiveTextField(
                   onSubmit: onSubmit,
-                  label: projectNameField_Label,
+                  label: t.addProject.projectNameFieldLabel,
                   controller: controller),
               SizedBox(height: spacing['2']),
               ResponsiveFilledButton(
-                  label: submitCreateProjectAction_Label,
+                  label: t.common.createAction,
                   onSubmit: onSubmit,
                   controller: controller)
             ]),

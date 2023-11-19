@@ -7,13 +7,13 @@ import 'package:storied/domain/_mocks/project_storage.dart';
 import 'package:storied/domain/project.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/domain/project_storage.dart';
-import 'package:storied/features/add_project/terms.dart';
 import 'package:storied/features/home/terms.dart';
 import 'package:storied/features/project/project_screen.dart';
 import 'package:storied/features/project/terms.dart';
 import 'package:storied/features/project/settings/terms.dart';
 import 'package:storied/main.dart';
 import 'package:storied/domain/projects.dart';
+import 'package:storied/i18n/strings.g.dart'; // import
 
 const root = 'root/com.app';
 
@@ -58,9 +58,9 @@ void main() {
 
       await tester.tapAndSettle(find.findByText(createProjectAction_Label));
       await tester.enterText(
-          find.findWidgetWithText(projectNameField_Label), 'some-new-project');
-      await tester
-          .tapAndSettle(find.findByText(submitCreateProjectAction_Label));
+          find.findWidgetWithText(t.addProject.projectNameFieldLabel),
+          'some-new-project');
+      await tester.tapAndSettle(find.findByText(t.common.createAction));
 
       find.findByText(appTitle_Text, count: 0);
       find.findByType(ProjectScreen);
