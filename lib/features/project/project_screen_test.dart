@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
-import 'package:storied/common/get_it.dart';
-import 'package:storied/common/storage/clients/local_storage_client.dart';
-import 'package:storied/domain/project.dart';
+import 'package:storied/config/get_it.dart';
+import 'package:storied/domain/document/_mocks/document.dart';
+import 'package:storied/domain/project/_mocks/project_storage.dart';
+import 'package:storied/domain/project/project.dart';
+import 'package:storied/domain/project/project_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 import 'package:storied/features/project/document/document_page.dart';
 import 'package:storied/features/project/settings/settings_screen.dart';
 import 'package:storied/features/project/project_screen.dart';
@@ -14,17 +17,23 @@ const root = 'root/com.app';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group(Project, () {
+  group(ProjectScreen, () {
     setUp(() async {
       getIt.reset();
-      registerFallbackValue(MaterialPageRoute(
-        builder: (context) => Container(),
-      ));
     });
 
     createWidgetUnderTest(WidgetTester tester, Project project) async {
-      getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
+      getIt.registerLazySingleton<ProjectStorageAdapterConfig>(() {
+        MockLocalProjectStorage storage = MockLocalProjectStorage();
 
+        when(() => storage.getDocument(project.storage.path)).thenAnswer((_) {
+          return Future.value(buildDocument());
+        });
+        return ProjectStorageAdapterConfig(
+            {StorageAdapterType.local: () => storage});
+      });
+
+      getIt.registerSingleton<Project>(project);
       await tester.pumpWidget(MaterialApp(
         home: ProjectScreen(project),
       ));
@@ -34,16 +43,16 @@ void main() {
     testWidgets('renders the title and the document page',
         (WidgetTester tester) async {
       await createWidgetUnderTest(
-          tester, Project.newWithName('Some project name'));
-
+        tester,
+        buildProject(name: 'Some project name'),
+      );
       expect(find.text('Some project name'), findsOneWidget);
       expect(find.byType(DocumentPage), findsOneWidget);
     });
 
     testWidgets('can navigate to the settings screen',
         (WidgetTester tester) async {
-      await createWidgetUnderTest(
-          tester, Project.newWithName('Some project name'));
+      await createWidgetUnderTest(tester, buildProject());
 
       await tester.tapAndSettle(find.byTooltip('Settings'));
 

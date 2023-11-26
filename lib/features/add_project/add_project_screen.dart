@@ -1,29 +1,41 @@
 import 'dart:math';
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
-import 'package:storied/common/get_it.dart';
-import 'package:storied/common/device/responsiveness.dart';
+import 'package:storied/config/get_it.dart';
 import 'package:storied/common/styling/spacing.dart';
-import 'package:storied/domain/project.dart';
+import 'package:storied/domain/project/project.dart';
+import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 import 'package:storied/domain/projects.dart';
-import 'package:storied/i18n/strings.g.dart';
+import 'package:storied/features/add_project/responsive_filled_button.dart';
+import 'package:storied/features/add_project/responsive_text_field.dart';
+import 'package:storied/common/i18n/strings.g.dart';
 
-class AddProjectScreen extends StatelessWidget {
+class AddProjectScreen extends StatefulWidget {
   final Function(Project) _onAdded;
 
   const AddProjectScreen(this._onAdded, {super.key});
 
-  _genTitle() {
-    return '${nouns.elementAt(Random().nextInt(50))} ${nouns.elementAt(Random().nextInt(50))}';
-  }
+  @override
+  State<AddProjectScreen> createState() => _AddProjectScreenState();
+}
+
+_genName() {
+  return '${nouns.elementAt(Random().nextInt(50))} ${nouns.elementAt(Random().nextInt(50))}';
+}
+
+class _AddProjectScreenState extends State<AddProjectScreen> {
+  String name = _genName();
+  StorageAdapterType storageType = StorageAdapterType.local;
 
   @override
   Widget build(BuildContext context) {
-    var controller = TextEditingController(text: _genTitle());
+    var storageOptions = getIt<ProjectStorageAdapterConfig>().enabledStorage;
 
-    onSubmit(String value) async {
-      Project project = await getIt<Projects>().createProject(value);
-      _onAdded(project);
+    var controller = TextEditingController(text: _genName());
+
+    onSubmit(_) async {
+      var project = await getIt<Projects>().createProject(name, storageType);
+      widget._onAdded(project);
     }
 
     return Scaffold(
@@ -34,10 +46,32 @@ class AddProjectScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ResponsiveTextField(
+                  onChange: onProjectNameChange,
                   onSubmit: onSubmit,
                   label: t.addProject.projectNameFieldLabel,
                   controller: controller),
               SizedBox(height: spacing['2']),
+              SegmentedButton(
+                selected: const {StorageAdapterType.local},
+                onSelectionChanged: (selected) {
+                  onStorageChange(selected.isEmpty
+                      ? StorageAdapterType.local
+                      : selected.first);
+                },
+                segments: [
+                  ButtonSegment(
+                      value: StorageAdapterType.local,
+                      label: Text(t.addProject.storageField.localOptionLabel),
+                      icon: const Icon(Icons.folder)),
+                  if (storageOptions.containsKey(StorageAdapterType.gdrive))
+                    ButtonSegment(
+                        value: StorageAdapterType.gdrive,
+                        label:
+                            Text(t.addProject.storageField.gDriveOptionLabel),
+                        icon: const Icon(Icons.cloud_upload)),
+                ],
+              ),
+              SizedBox(height: spacing['4']),
               ResponsiveFilledButton(
                   label: t.common.createAction,
                   onSubmit: onSubmit,
@@ -46,53 +80,16 @@ class AddProjectScreen extends StatelessWidget {
       ),
     );
   }
-}
 
-class ResponsiveFilledButton extends StatelessWidget {
-  const ResponsiveFilledButton({
-    super.key,
-    required this.label,
-    required this.onSubmit,
-    required this.controller,
-  });
-
-  final Function(String p1) onSubmit;
-  final TextEditingController controller;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return FilledButton(
-        onPressed: () => onSubmit(controller.text), child: Text(label));
+  onProjectNameChange(String newName) {
+    setState(() {
+      name = newName;
+    });
   }
-}
 
-class ResponsiveTextField extends StatelessWidget {
-  const ResponsiveTextField({
-    super.key,
-    required this.label,
-    required this.onSubmit,
-    required this.controller,
-  });
-
-  final Function(String p1) onSubmit;
-  final TextEditingController controller;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxWidth: context.responsive(300, sm: 400),
-      ),
-      child: TextField(
-        onSubmitted: onSubmit,
-        controller: controller,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          labelText: label,
-        ),
-      ),
-    );
+  onStorageChange(StorageAdapterType newClientType) {
+    setState(() {
+      storageType = newClientType;
+    });
   }
 }

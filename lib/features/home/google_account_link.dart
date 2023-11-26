@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:storied/clients/google_apis_provider.dart';
-import 'package:storied/common/get_it.dart';
+import 'package:storied/config/get_it.dart';
 import 'package:storied/features/home/terms.dart';
 import 'package:watch_it/watch_it.dart';
 

@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'package:storied/common/storage/clients/abstract_storage_client.dart';
+import 'package:storied/clients/local_storage_client.dart';
+import 'package:storied/config/get_it.dart';
 
 class AppConfigStorage {
-  final AbstractStorageClient _storageClient;
+  LocalStorageClient get _localStorage => getIt<LocalStorageClient>();
 
   List<dynamic> projectsJson = List.of([]);
 
   dynamic _manifestCache;
-
-  AppConfigStorage(this._storageClient);
 
   Future<AppConfigStorage> warm() async {
     _manifestCache = await getProjectManifest(force: true);
@@ -16,24 +15,20 @@ class AppConfigStorage {
     return this;
   }
 
-  Future<String> createContentFolder(String projectId) async {
-    return (await _storageClient.createDir(projectId)).path;
-  }
-
   Future<dynamic> overwriteProjectManifest(dynamic content) async {
-    await _storageClient.writeFile('projects.json', jsonEncode(content));
+    await _localStorage.writeFile('projects.json', jsonEncode(content));
     return getProjectManifest();
   }
 
   Future<dynamic> getProjectManifest({force = false}) async {
     if (_manifestCache == null || force) {
-      var result = await _storageClient.getFileData('projects.json');
+      var result = await _localStorage.getFileData('projects.json');
 
       if (result != null) {
         return jsonDecode(result);
       }
       var emptyManifestData = {'projects': []};
-      await _storageClient.writeFile(
+      await _localStorage.writeFile(
           'projects.json', jsonEncode(emptyManifestData));
       return emptyManifestData;
     }
@@ -55,12 +50,11 @@ class AppConfigStorage {
   }
 
   Future<String> getProjectRoot(projectId) async {
-    return (await _storageClient.createDir(projectId)).path;
+    return (await _localStorage.createDir(projectId)).path;
   }
 
   Future<dynamic> writeToProjectRoot(
       String projectId, String fileName, dynamic content) async {
-    return _storageClient.writeFile(
-        '$projectId/$fileName', jsonEncode(content));
+    return _localStorage.writeFile('$projectId/$fileName', jsonEncode(content));
   }
 }

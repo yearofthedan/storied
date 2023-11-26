@@ -203,9 +203,9 @@ class EditorToolbar extends StatelessWidget {
 
 class EditorWidget extends StatelessWidget {
   final FocusNode _focusNode = FocusNode();
-  final Function(Document) _onSave;
+  final Function(Document) onSave;
 
-  EditorWidget(this._onSave, {super.key});
+  EditorWidget({super.key, required this.onSave});
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +222,7 @@ class EditorWidget extends StatelessWidget {
             child: EditorToolbar(
               onAddEditNote: () => _addEditNote(context),
               onSaveDocument: () {
-                _onSave(context.quilController!.document);
+                onSave(context.quilController!.document);
               },
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:storied/common/get_it.dart';
-import 'package:storied/domain/project.dart';
+import 'package:storied/config/get_it.dart';
+import 'package:storied/domain/document/document.dart';
+import 'package:storied/domain/project/project.dart';
 import 'package:storied/features/project/document/document_page.dart';
 import 'package:storied/features/project/settings/routes.dart';
 import 'package:storied/features/project/terms.dart';
@@ -38,9 +39,23 @@ class ProjectScreen extends StatelessWidget with RouteAware {
       body: Row(
         children: [
           Expanded(
-              child: Container(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: DocumentPage(_project.document))),
+            child: Container(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: FutureBuilder<Document>(
+                future: _project.storedDocument,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+                    return DocumentPage(snapshot.data!);
+                  } else {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ),
+          )
         ],
       ),
     );

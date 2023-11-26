@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:storied/common/get_it.dart';
-import 'package:storied/domain/project.dart';
-import 'package:storied/domain/project_storage.dart';
+import 'package:storied/config/get_it.dart';
+import 'package:storied/config/app_config_storage.dart';
+import 'package:storied/config/app_config.dart';
+import 'package:storied/domain/project/project.dart';
+import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
+import 'package:storied/features/add_project/new_project.dart';
 
 class Projects extends ChangeNotifier {
   late List<Project> projectList;
@@ -11,31 +14,50 @@ class Projects extends ChangeNotifier {
     initialList.forEach(_registerProjectListener);
   }
 
-  _onUpdate(Project project) {
+  Future<Project> createProject(
+      String projectName, StorageAdapterType storageClient) async {
+    var newProject = NewProject(projectName, storageClient);
+
+    Project storedProject = await storageClient.client().add(newProject);
+    _registerProjectListener(storedProject);
+
+    projectList =
+        List<Project>.from([...await _getLatestList(), storedProject]);
+    getIt<AppConfig>().updateProjectList(projectList);
+    notifyListeners();
+    return storedProject;
+  }
+
+  _registerProjectListener(Project project) {
+    project.addListener(() => _onProjectUpdate(project));
+    return project;
+  }
+
+  Future<List<Project>> _getLatestList() async {
+    return getIt<AppConfig>()
+        .getProjectList()
+        .map((e) => Project.fromJson(e))
+        .toList();
+  }
+
+  _onProjectUpdate(Project project) async {
     if (project.deleted) {
-      var updatedList = List<Project>.from(projectList);
-      updatedList.removeWhere((element) => element.id == project.id);
-      projectList = updatedList;
+      projectList = (await _getLatestList())
+        ..removeWhere((element) => element.id == project.id);
+      await getIt
+          .get<AppConfigStorage>()
+          .setToManifest('projects', projectList);
     }
     notifyListeners();
   }
 
-  Future<Project> createProject(String projectName) async {
-    Project newProject = await getIt<ProjectStorage>().add(projectName);
-    _registerProjectListener(newProject);
-    projectList = List<Project>.from([...projectList, newProject]);
-    notifyListeners();
-    return newProject;
-  }
-
-  _registerProjectListener(Project project) {
-    project.addListener(() => _onUpdate(project));
-    return project;
-  }
-
   static Future<Projects> fromStorage() async {
-    List<Project> storedProjects = await getIt<ProjectStorage>().getAll();
-    var projects = Projects(storedProjects);
-    return projects;
+    List<Project> projectList = getIt
+        .get<AppConfig>()
+        .getProjectList()
+        .map((e) => Project.fromJson(e))
+        .toList();
+
+    return Projects(projectList);
   }
 }

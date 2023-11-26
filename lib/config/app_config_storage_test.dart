@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/_test_helpers/storage.dart';
-import 'package:storied/common/storage/app_config_storage.dart';
+import 'package:storied/clients/local_storage_client.dart';
+import 'package:storied/config/app_config_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:storied/common/storage/clients/local_storage_client.dart';
 
-import '../get_it.dart';
+import 'get_it.dart';
 
 const root = 'root/com.app';
 
@@ -20,8 +20,7 @@ void main() {
   group(AppConfigStorage, () {
     group('getProjectManifest', () {
       test('gets a project manifest if it exists', () async {
-        var localStorage =
-            getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
+        getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
 
         var mockFileReference = FakeFile();
         when(() => mockFileReference.existsSync()).thenReturn(true);
@@ -29,7 +28,7 @@ void main() {
             .thenAnswer((_) => Future.value('{"projects":[]}'));
 
         IOOverrides.runZoned(() async {
-          final storage = AppConfigStorage(localStorage);
+          final storage = AppConfigStorage();
           var result = await storage.getProjectManifest();
 
           expect(result, {'projects': []});
@@ -37,8 +36,7 @@ void main() {
       });
 
       test('creates a new project manifest if none exists', () async {
-        var localStorage =
-            getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
+        getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
 
         var mockFileReference = FakeFile();
         when(() => mockFileReference.existsSync()).thenReturn(false);
@@ -48,7 +46,7 @@ void main() {
             .thenAnswer((_) => Future.value('{"projects":[]}'));
 
         IOOverrides.runZoned(() async {
-          final storage = AppConfigStorage(localStorage);
+          final storage = AppConfigStorage();
           var result = await storage.getProjectManifest();
 
           expect(result, {'projects': []});

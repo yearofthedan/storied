@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:storied/common/storage/clients/abstract_storage_client.dart';
-import 'package:storied/domain/storage_ref.dart';
+import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
+import 'package:storied/domain/project/storage/storage_ref.dart';
 
-class GDriveStorageClient implements AbstractStorageClient {
+class LocalStorageClient {
   Future<Directory> get _storageDir async {
     final Directory directory = await getApplicationDocumentsDirectory();
     debugPrint('Getting files from ${directory.path}');
@@ -17,7 +17,6 @@ class GDriveStorageClient implements AbstractStorageClient {
     return (await _storageDir).path;
   }
 
-  @override
   Future<List<String>> listFiles({String? path}) async {
     String resolvedPath = '${await _storageDirPath}/${path ?? ''}';
     final List<String> list = await Directory(resolvedPath)
@@ -27,7 +26,6 @@ class GDriveStorageClient implements AbstractStorageClient {
     return list;
   }
 
-  @override
   Future<String?> getFileData(String path) async {
     var file = File('${await _storageDirPath}/$path');
     if (!file.existsSync()) {
@@ -37,24 +35,21 @@ class GDriveStorageClient implements AbstractStorageClient {
     return await file.readAsString();
   }
 
-  @override
   createDir(String dirName) async {
-    // drive.File.fromJson("")
-    // drive.FilesResource().create(request);
-
     Directory newDir = Directory('${await _storageDirPath}/$dirName');
 
     await newDir.create();
-    return StorageRef(path: newDir.path, type: StorageType.local);
+    return StorageReference(path: newDir.path, type: StorageAdapterType.local);
   }
 
-  @override
   Future<File> writeFile(String path, dynamic data) async {
     var file = File('${await _storageDirPath}/$path');
+    if (!file.existsSync()) {
+      file.createSync(recursive: true);
+    }
     return file.writeAsString(data);
   }
 
-  @override
   Future<bool> deleteDir(String dirName) async {
     Directory dirRef = Directory('${await _storageDirPath}/$dirName');
 

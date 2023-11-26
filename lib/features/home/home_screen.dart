@@ -1,4 +1,4 @@
-import 'package:storied/domain/project.dart';
+import 'package:storied/domain/project/project.dart';
 import 'package:storied/features/add_project/routes.dart';
 import 'package:storied/features/home/google_account_link.dart';
 import 'package:storied/features/home/project_list.dart';

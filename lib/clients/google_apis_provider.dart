@@ -2,7 +2,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:flutter/foundation.dart';
 import 'package:storied/common/exceptions.dart';
-import 'package:storied/common/get_it.dart';
+import 'package:storied/config/get_it.dart';
 
 class GoogleApisProvider with ChangeNotifier {
   late GoogleSignIn _googleSignIn;

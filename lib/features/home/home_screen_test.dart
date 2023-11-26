@@ -2,16 +2,18 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/find_extensions.dart';
-import 'package:storied/_test_helpers/mocktail.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
 import 'package:storied/clients/_mocks/google_apis_mocks.dart';
 import 'package:storied/clients/google_apis_provider.dart';
-import 'package:storied/common/get_it.dart';
-import 'package:storied/common/storage/clients/local_storage_client.dart';
-import 'package:storied/domain/_mocks/project_storage.dart';
-import 'package:storied/domain/project.dart';
-import 'package:storied/domain/project_storage.dart';
+import 'package:storied/clients/local_storage_client.dart';
+import 'package:storied/config/get_it.dart';
+import 'package:storied/domain/document/_mocks/document.dart';
+import 'package:storied/domain/project/_mocks/project_storage.dart';
+import 'package:storied/domain/project/project.dart';
+import 'package:storied/domain/project/storage/_mocks/project_storage.dart';
+import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 import 'package:storied/features/add_project/add_project_screen.dart';
+import 'package:storied/features/add_project/new_project.dart';
 import 'package:storied/features/home/home_screen.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:storied/features/home/terms.dart';
@@ -27,21 +29,27 @@ void main() {
   group(HomeScreen, () {
     setUp(() async {
       getIt.reset();
-      registerFallbackValue(Project.newWithName('dummy'));
+      registerFallbackValue(NewProject('dummy', StorageAdapterType.local));
     });
 
     createWidgetUnderTest(WidgetTester tester,
         {Iterable<Project> projects = emptyProjects,
         bool signIn = false}) async {
-      var storage = MockProjectStorage();
-      var googleApis = MockGoogleApisProvider();
-
-      when(() => storage.add(any())).thenAnswer(reflectFirstArgAsFuture);
-      when(() => googleApis.isSignedIn).thenReturn(signIn);
-
       getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
-      getIt.registerSingleton<ProjectStorage>(storage);
-      getIt.registerSingleton<GoogleApisProvider>(googleApis);
+      getIt.registerLazySingleton<ProjectStorageAdapterConfig>(() {
+        var storage = MockProjectStorageAdapter();
+        when(() => storage.getDocument(any()))
+            .thenAnswer((_) => Future.value(buildDocument()));
+        when(() => storage.add(any()))
+            .thenAnswer((_) => Future.value(buildProject()));
+        return ProjectStorageAdapterConfig(
+            {StorageAdapterType.local: () => storage});
+      });
+      getIt.registerLazySingleton<GoogleApisProvider>(() {
+        var googleApis = MockGoogleApisProvider();
+        when(() => googleApis.isSignedIn).thenReturn(signIn);
+        return googleApis;
+      });
       getIt.registerFactory<Projects>(() {
         return Projects(List.of(projects));
       });
@@ -55,7 +63,8 @@ void main() {
     testWidgets('allows navigating to an existing project',
         (WidgetTester tester) async {
       await createWidgetUnderTest(tester,
-          projects: [Project.newWithName('some-project-title')]);
+          projects: [buildProject(name: 'some-project-title')]);
+
       expect(find.text('some-project-title'), findsOneWidget);
 
       await tester.tapAndSettle(find.text('some-project-title'));

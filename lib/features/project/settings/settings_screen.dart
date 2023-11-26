@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:storied/common/get_it.dart';
-import 'package:storied/domain/project.dart';
+import 'package:storied/config/get_it.dart';
+import 'package:storied/domain/project/project.dart';
 import 'package:storied/widgets/snack_bar.dart';
 import 'package:storied/features/project/settings/terms.dart';
 
@@ -52,7 +52,7 @@ class SettingsScreen extends StatelessWidget {
               ),
               ListTile(
                 title: const Text(settingEntry_PathLabel),
-                subtitle: Text(project.storage?.path ?? 'Unknown path'),
+                subtitle: Text(project.storage.path),
               ),
               ListTile(
                 onTap: () => alertDialog(context, project),

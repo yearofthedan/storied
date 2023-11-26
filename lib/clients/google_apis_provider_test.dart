@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:storied/clients/_mocks/google_apis_mocks.dart';
 import 'package:storied/clients/google_apis_provider.dart';
 import 'package:storied/common/exceptions.dart';
-import 'package:storied/common/get_it.dart';
+import 'package:storied/config/get_it.dart';
 
 class MockObservability extends Mock implements Observability {}
 
