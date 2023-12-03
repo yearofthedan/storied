@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
-import 'package:storied/domain/project/storage/storage_ref.dart';
 
 class LocalStorageClient {
   Future<Directory> get _storageDir async {
@@ -35,11 +33,10 @@ class LocalStorageClient {
     return await file.readAsString();
   }
 
-  createDir(String dirName) async {
+  Future<String> createDir(String dirName) async {
     Directory newDir = Directory('${await _storageDirPath}/$dirName');
-
-    await newDir.create();
-    return StorageReference(path: newDir.path, type: StorageAdapterType.local);
+    Directory created = await newDir.create();
+    return created.path;
   }
 
   Future<File> writeFile(String path, dynamic data) async {

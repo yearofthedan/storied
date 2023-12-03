@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget with WatchItMixin {
         watchPropertyValue<Projects, List<Project>>((p) => p.projectList);
 
     navigateToProject(Project project) => navToProject(context, project);
-    navigateToCreate() => navToAddProject(context, navigateToProject);
+    navigateToCreate() => navToAddProject(context);
 
     return Container(
       decoration: BoxDecoration(

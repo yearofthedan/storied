@@ -1,14 +1,24 @@
 import 'package:storied/config/app_config_storage.dart';
 import 'package:storied/config/get_it.dart';
+import 'package:storied/domain/project/project.dart';
 
 class AppConfig {
-  List<dynamic> getProjectList() {
-    return List<dynamic>.from(getIt.get<AppConfigStorage>().projectsJson);
+  Future<List<Project>> getProjectList() async {
+    var projectsJson =
+        await getIt.get<AppConfigStorage>().getFromAppManifest('projects');
+
+    List<Project> projects = [];
+
+    for (var entry in projectsJson) {
+      projects.add(Project.fromJson(entry));
+    }
+
+    return projects;
   }
 
-  updateProjectList(dynamic projectsList) {
-    return getIt
+  Future<void> updateProjectList(dynamic projectsList) async {
+    await getIt
         .get<AppConfigStorage>()
-        .setToManifest('projects', projectsList);
+        .setToAppManifest('projects', projectsList);
   }
 }

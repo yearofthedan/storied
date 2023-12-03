@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:storied/_test_helpers/find_extensions.dart';
 import 'package:storied/_test_helpers/tester_extensions.dart';
+import 'package:storied/clients/_mocks/google_apis_mocks.dart';
+import 'package:storied/clients/_mocks/local_storage_client.dart';
+import 'package:storied/clients/google_apis_provider.dart';
+import 'package:storied/clients/local_storage_client.dart';
 import 'package:storied/config/_mocks/app_config.dart';
 import 'package:storied/config/app_config.dart';
 import 'package:storied/config/get_it.dart';
-import 'package:storied/domain/project/_mocks/project_storage.dart';
 import 'package:storied/domain/project/project.dart';
-import 'package:storied/domain/project/storage/_mocks/project_storage.dart';
-import 'package:storied/domain/project/storage/project_storage_adapter.dart';
 import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 import 'package:storied/features/add_project/add_project_screen.dart';
 import 'package:mocktail/mocktail.dart';
@@ -23,20 +24,26 @@ void main() {
 
   group(AddProjectScreen, () {
     Project? added;
-    ProjectStorageAdapter? localStorage;
-    ProjectStorageAdapter? gDriveStorage;
+    LocalStorageClient? localStorage;
+    GoogleApisProvider? gDriveStorage;
 
     setUp(() async {
-      localStorage = MockProjectStorageAdapter();
-      gDriveStorage = MockProjectStorageAdapter();
+      localStorage = MockLocalStorageClient();
+      gDriveStorage = MockGoogleApisProvider();
 
-      var storageConfig = ProjectStorageAdapterConfig({
-        StorageAdapterType.local: () => localStorage!,
-        StorageAdapterType.gdrive: () => gDriveStorage!,
+      getIt.registerLazySingleton<ProjectStorageAdapterConfig>(() {
+        var config = ProjectStorageAdapterConfig();
+        config.enableOption(StorageAdapterType.gdrive);
+        return config;
       });
-      getIt.registerSingleton<ProjectStorageAdapterConfig>(storageConfig);
-      getIt.registerSingleton<AppConfig>(MockAppConfig());
-
+      getIt.registerLazySingleton<AppConfig>(() {
+        var mockAppConfig = MockAppConfig();
+        when(() => mockAppConfig.getProjectList())
+            .thenAnswer((_) => Future.value([]));
+        return mockAppConfig;
+      });
+      getIt.registerSingleton<LocalStorageClient>(localStorage!);
+      getIt.registerSingleton<GoogleApisProvider>(gDriveStorage!);
       getIt.registerFactory<Projects>(() {
         return Projects([]);
       });
@@ -57,9 +64,8 @@ void main() {
 
     testWidgets('allows adding a local project as default',
         (WidgetTester tester) async {
-      when(() => localStorage!.add(any<NewProject>())).thenAnswer(
-          (invocation) => Future.value(
-              buildProject(name: invocation.positionalArguments[0].name)));
+      when(() => localStorage!.createDir(any<String>()))
+          .thenAnswer((invocation) => Future.value('some/path'));
       await createWidgetUnderTest(tester);
 
       var field = find.findWidgetWithText(t.addProject.projectNameFieldLabel);
@@ -74,10 +80,9 @@ void main() {
 
     testWidgets('allows adding a gdrive project when linked',
         (WidgetTester tester) async {
-      when(() => gDriveStorage!.add(any<NewProject>())).thenAnswer(
-          (invocation) => Future.value(buildProject(
-              name: invocation.positionalArguments[0].name,
-              storage: buildStorageRef(type: StorageAdapterType.gdrive))));
+      when(() => gDriveStorage!.createDir(any<String>()))
+          .thenAnswer((invocation) => Future.value('some-id'));
+
       await createWidgetUnderTest(tester);
 
       var field = find.findWidgetWithText(t.addProject.projectNameFieldLabel);

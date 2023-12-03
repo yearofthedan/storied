@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storied/clients/google_apis_provider.dart';
 import 'package:storied/config/get_it.dart';
+import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 import 'package:storied/features/home/terms.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -35,9 +36,15 @@ class GoogleAccountLink extends WatchingWidget {
 
   Future<void> _handleSignIn() async {
     getIt<GoogleApisProvider>().signIn();
+    getIt<ProjectStorageAdapterConfig>()
+        .enabledStorage
+        .add(StorageAdapterType.gdrive);
   }
 
   Future<void> _handleSignOut() async {
     getIt<GoogleApisProvider>().signOut();
+    getIt<ProjectStorageAdapterConfig>()
+        .enabledStorage
+        .remove(StorageAdapterType.gdrive);
   }
 }

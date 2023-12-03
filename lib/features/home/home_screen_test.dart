@@ -10,7 +10,6 @@ import 'package:storied/config/get_it.dart';
 import 'package:storied/domain/document/_mocks/document.dart';
 import 'package:storied/domain/project/_mocks/project_storage.dart';
 import 'package:storied/domain/project/project.dart';
-import 'package:storied/domain/project/storage/_mocks/project_storage.dart';
 import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 import 'package:storied/features/add_project/add_project_screen.dart';
 import 'package:storied/features/add_project/new_project.dart';
@@ -36,15 +35,8 @@ void main() {
         {Iterable<Project> projects = emptyProjects,
         bool signIn = false}) async {
       getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
-      getIt.registerLazySingleton<ProjectStorageAdapterConfig>(() {
-        var storage = MockProjectStorageAdapter();
-        when(() => storage.getDocument(any()))
-            .thenAnswer((_) => Future.value(buildDocument()));
-        when(() => storage.add(any()))
-            .thenAnswer((_) => Future.value(buildProject()));
-        return ProjectStorageAdapterConfig(
-            {StorageAdapterType.local: () => storage});
-      });
+      getIt.registerSingleton<ProjectStorageAdapterConfig>(
+          ProjectStorageAdapterConfig());
       getIt.registerLazySingleton<GoogleApisProvider>(() {
         var googleApis = MockGoogleApisProvider();
         when(() => googleApis.isSignedIn).thenReturn(signIn);
@@ -62,8 +54,13 @@ void main() {
 
     testWidgets('allows navigating to an existing project',
         (WidgetTester tester) async {
-      await createWidgetUnderTest(tester,
-          projects: [buildProject(name: 'some-project-title')]);
+      var storage = MockProjectStorage();
+      when(() => storage.getDocument())
+          .thenAnswer((_) => Future.value(buildDocument()));
+
+      await createWidgetUnderTest(tester, projects: [
+        buildProject(name: 'some-project-title', storage: storage)
+      ]);
 
       expect(find.text('some-project-title'), findsOneWidget);
 

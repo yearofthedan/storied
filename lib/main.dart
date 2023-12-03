@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:storied/common/exceptions.dart';
-import 'package:storied/config/app_config_storage.dart';
 import 'package:storied/config/get_it.dart';
 import 'package:storied/common/styling/theme.dart';
 import 'package:storied/common/i18n/strings.g.dart';
+import 'package:storied/domain/projects.dart';
 import 'features/home/home_screen.dart';
 
 Future<void> main() async {
@@ -17,7 +17,7 @@ Future<void> main() async {
   LocaleSettings.useDeviceLocale();
 
   initGetIt();
-  await getIt.getAsync<AppConfigStorage>();
+  await getIt.getAsync<Projects>();
 
   FlutterError.onError = (details) async {
     FlutterError.presentError(details);

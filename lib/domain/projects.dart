@@ -18,12 +18,13 @@ class Projects extends ChangeNotifier {
       String projectName, StorageAdapterType storageClient) async {
     var newProject = NewProject(projectName, storageClient);
 
-    Project storedProject = await storageClient.client().add(newProject);
+    Project storedProject = await newProject.save();
     _registerProjectListener(storedProject);
 
-    projectList =
-        List<Project>.from([...await _getLatestList(), storedProject]);
-    getIt<AppConfig>().updateProjectList(projectList);
+    var current = await _getLatestList();
+
+    projectList = List<Project>.from([...current, storedProject]);
+    await getIt<AppConfig>().updateProjectList(projectList);
     notifyListeners();
     return storedProject;
   }
@@ -34,10 +35,8 @@ class Projects extends ChangeNotifier {
   }
 
   Future<List<Project>> _getLatestList() async {
-    return getIt<AppConfig>()
-        .getProjectList()
-        .map((e) => Project.fromJson(e))
-        .toList();
+    List<Project> projects = await getIt<AppConfig>().getProjectList();
+    return projects;
   }
 
   _onProjectUpdate(Project project) async {
@@ -46,18 +45,13 @@ class Projects extends ChangeNotifier {
         ..removeWhere((element) => element.id == project.id);
       await getIt
           .get<AppConfigStorage>()
-          .setToManifest('projects', projectList);
+          .setToAppManifest('projects', projectList);
     }
     notifyListeners();
   }
 
   static Future<Projects> fromStorage() async {
-    List<Project> projectList = getIt
-        .get<AppConfig>()
-        .getProjectList()
-        .map((e) => Project.fromJson(e))
-        .toList();
-
+    List<Project> projectList = await getIt<AppConfig>().getProjectList();
     return Projects(projectList);
   }
 }

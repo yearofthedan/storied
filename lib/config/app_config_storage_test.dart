@@ -29,7 +29,7 @@ void main() {
 
         IOOverrides.runZoned(() async {
           final storage = AppConfigStorage();
-          var result = await storage.getProjectManifest();
+          var result = await storage.getAppManifest();
 
           expect(result, {'projects': []});
         }, createFile: (_) => mockFileReference);
@@ -47,7 +47,7 @@ void main() {
 
         IOOverrides.runZoned(() async {
           final storage = AppConfigStorage();
-          var result = await storage.getProjectManifest();
+          var result = await storage.getAppManifest();
 
           expect(result, {'projects': []});
         }, createFile: (_) => mockFileReference);

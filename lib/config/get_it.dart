@@ -14,16 +14,13 @@ initGetIt() {
 
   getIt.registerSingleton<LocalStorageClient>(LocalStorageClient());
   getIt.registerSingleton<ProjectStorageAdapterConfig>(
-      ProjectStorageAdapterConfig.withLocal());
+      ProjectStorageAdapterConfig());
 
-  getIt.registerSingletonAsync<AppConfigStorage>(
-      () => AppConfigStorage().warm());
+  getIt.registerSingleton<AppConfigStorage>(AppConfigStorage());
 
-  getIt.registerSingletonWithDependencies<AppConfig>(() => AppConfig(),
-      dependsOn: [AppConfigStorage]);
+  getIt.registerSingleton<AppConfig>(AppConfig());
 
-  getIt.registerSingletonAsync(() => Projects.fromStorage(),
-      dependsOn: [AppConfig]);
+  getIt.registerSingletonAsync<Projects>(() => Projects.fromStorage());
 
   getIt.registerLazySingleton<GoogleApisProvider>(
       () => GoogleApisProvider.driveScoped());

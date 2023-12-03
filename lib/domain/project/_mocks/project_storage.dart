@@ -1,14 +1,16 @@
+import 'package:mocktail/mocktail.dart';
 import 'package:storied/domain/project/project.dart';
-import 'package:storied/domain/project/storage/_mocks/project_storage.dart';
-import 'package:storied/domain/project/storage/storage_ref.dart';
+import 'package:storied/domain/project/storage/project_storage.dart';
+import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 
-Project buildProject(
-    {name = 'Some name', id = 'some-id', StorageReference? storage}) {
-  var json = {
-    'id': id,
-    'name': name,
-    'storage': (storage ?? buildStorageRef()).toJson(),
-  };
+class MockProjectStorage extends Mock implements ProjectStorage {
+  @override
+  final StorageAdapterType type = StorageAdapterType.local;
 
-  return Project.fromJson(json);
+  @override
+  get pathToProject => 'some-path';
+}
+
+Project buildProject({name = 'Some name', id = 'some-id', storage}) {
+  return Project(id, name, storage ?? MockProjectStorage());
 }

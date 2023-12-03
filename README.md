@@ -6,7 +6,7 @@ An application for creative writing projects.
 
 I wanted to have an app to help me write stories, and with three core featues. 
 1. [super basic] It provides word processing capabilities
-2. [in progress] It works across desktop and mobile devices for when I'm on the road
+2. [partial] It works across desktop and mobile devices for when I'm on the road
 3. [not done at all] It supports adding and cross referencing contextual notes such as character studies 
 
 Also I was curious to know how fit for purpose Flutter is now.

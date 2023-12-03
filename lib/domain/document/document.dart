@@ -1,9 +1,8 @@
-import 'package:storied/domain/project/storage/storage_ref.dart';
+import 'package:storied/domain/project/storage/project_storage.dart';
 
 class Document {
-  final StorageReference _storage;
+  final ProjectStorage storage;
   List<dynamic>? _data;
-
   get empty {
     return _data == null;
   }
@@ -19,13 +18,10 @@ class Document {
     return _data;
   }
 
-  Document(this._storage, this._data) : dirty = true;
+  Document(this._data, this.storage) : dirty = true;
 
   Future<Document> save() {
-    return _storage
-        .getClient()
-        .saveDocument(_storage.path, data!)
-        .then((value) {
+    return storage.saveDocument(_data).then((value) {
       dirty = false;
       return value;
     });

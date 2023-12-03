@@ -5,7 +5,6 @@ import 'package:storied/_test_helpers/storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:storied/clients/local_storage_client.dart';
-import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 
 const root = 'root/com.app';
 
@@ -67,8 +66,7 @@ void main() {
           final storage = LocalStorageClient();
 
           var result = await storage.createDir('new dir');
-          expect(result.path, dir.path);
-          expect(result.type, StorageAdapterType.local);
+          expect(result, dir.path);
         }, createDirectory: (path) => dir);
       });
     });

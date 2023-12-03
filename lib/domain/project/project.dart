@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:storied/common/exceptions.dart';
+import 'package:storied/config/get_it.dart';
 import 'package:storied/domain/document/document.dart';
-import 'package:storied/domain/project/storage/storage_ref.dart';
-import 'package:storied/features/add_project/new_project.dart';
+import 'package:storied/domain/project/storage/project_storage.dart';
+import 'package:storied/domain/project/storage/project_storage_adapter_config.dart';
 
 class Project extends ChangeNotifier {
-  final String name;
-  final String id;
-  StorageReference storage;
+  late String name;
+  late String id;
+  late ProjectStorage storage;
   bool _deleted = false;
 
   set deleted(value) {
     _deleted = value;
-    notifyListeners();
   }
 
   get deleted {
     return _deleted;
   }
 
-  Project(NewProject project, this.storage)
-      : id = project.id,
-        name = project.name;
+  Project(this.id, this.name, this.storage);
 
-  Project.fromJson(json)
-      : id = json['id'],
-        name = json['name'],
-        storage = StorageReference.fromJson(json['storage']);
+  Project.fromJson(dynamic json) {
+    id = json['id'];
+    name = json['name'];
+    storage = getIt<ProjectStorageAdapterConfig>()
+        .projectStorageClientFromJson(json['storage']);
+  }
 
   Future<Document> get storedDocument {
-    return storage.getClient().getDocument(storage.path);
+    return storage.getDocument();
   }
 
   Future<Project> delete() async {
     try {
-      deleted = await storage.getClient().delete(this);
+      deleted = await storage.delete();
+      notifyListeners();
       return this;
     } catch (e, s) {
       captureException(
@@ -44,10 +45,6 @@ class Project extends ChangeNotifier {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'id': id,
-      'storage': storage.toJson(),
-    };
+    return {'name': name, 'id': id, 'storage': storage.toJson()};
   }
 }

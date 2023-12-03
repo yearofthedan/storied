@@ -31,7 +31,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   Widget build(BuildContext context) {
     var storageOptions = getIt<ProjectStorageAdapterConfig>().enabledStorage;
 
-    var controller = TextEditingController(text: _genName());
+    var controller = TextEditingController(text: name);
 
     onSubmit(_) async {
       var project = await getIt<Projects>().createProject(name, storageType);
@@ -63,7 +63,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                       value: StorageAdapterType.local,
                       label: Text(t.addProject.storageField.localOptionLabel),
                       icon: const Icon(Icons.folder)),
-                  if (storageOptions.containsKey(StorageAdapterType.gdrive))
+                  if (storageOptions.contains(StorageAdapterType.gdrive))
                     ButtonSegment(
                         value: StorageAdapterType.gdrive,
                         label:
